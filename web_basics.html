@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Development Basics</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --secondary: #24292e;
+            --bg-light: #f6f8fa;
+            --text: #24292e;
+            --code-bg: #f1f1f1;
+            --border: #e1e4e8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: white;
+        }
+        
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background-color: var(--bg-light);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #586069;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2c974b;
+        }
+        
+        main {
+            padding: 4rem 0;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            white-space: pre;
+        }
+        
+        .code-block::before {
+            content: "Code";
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .code-block.html::before {
+            content: "HTML";
+        }
+        
+        .code-block.css::before {
+            content: "CSS";
+        }
+        
+        .code-block.js::before {
+            content: "JavaScript";
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .progress-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 99;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            width: 200px;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .progress-container {
+                display: none;
+            }
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 1rem 0 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                <div class="logo">
+                    <span>Web Dev Basics</span>
+                    <span style="font-size: 10px;">learn.withkhent.com</span>
+                </div>
+                </a>
+                </a>
+                <div class="nav-links">
+                    <a href="#html-basics">HTML</a>
+                    <a href="#css-fundamentals">CSS</a>
+                    <a href="#javascript-intro">JavaScript</a>
+                    <a href="#responsive-design">Responsive Design</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>Web Development Fundamentals</h1>
+            <p>Learn the core technologies that power modern websites and web applications</p>
+            <a href="#get-started" class="btn">Get Started</a>
+        </div>
+    </div>
+    
+    <main class="container">
+        <section id="get-started">
+            <h2>Why Learn Web Development?</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Universal Platform</h3>
+                    <p>The web is accessible on virtually every device, making it the most universal platform for applications.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>High Demand Skills</h3>
+                    <p>Web development skills are among the most sought-after in the tech industry, with abundant job opportunities.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💪</div>
+                    <h3>Empowerment</h3>
+                    <p>Creating your own websites gives you the ability to turn your ideas into reality and share them with the world.</p>
+                </div>
+            </div>
+            
+            <h3>The Three Core Technologies</h3>
+            <p>Web development is built upon three fundamental technologies:</p>
+            <ul>
+                <li><strong>HTML</strong> - Structure and content</li>
+                <li><strong>CSS</strong> - Design and presentation</li>
+                <li><strong>JavaScript</strong> - Interactivity and behavior</li>
+            </ul>
+            <p>Learning these three technologies is essential for anyone starting in web development. In this tutorial, we'll cover the basics of each.</p>
+        </section>
+        
+        <section id="html-basics">
+            <h2>HTML Basics</h2>
+            
+            <h3>What is HTML?</h3>
+            <p>HTML (HyperText Markup Language) is the standard markup language for creating web pages. It defines the structure and content of a webpage using tags.</p>
+            
+            <h3>HTML Document Structure</h3>
+            <p>Every HTML document follows a basic structure:</p>
+
+            <div class="code-block html">
+            <pre>
+            <code>
+            &lt;!DOCTYPE html&gt;
+            &lt;html lang="en"&gt;
+            &lt;head&gt;
+                &lt;meta charset="UTF-8"&gt;
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+                &lt;title&gt;My First Webpage&lt;/title&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;!-- Content goes here --&gt;
+                &lt;h1&gt;Hello, World!&lt;/h1&gt;
+                &lt;p&gt;This is my first webpage.&lt;/p&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+            </code>
+            </pre>
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> The <code>&lt;!DOCTYPE html&gt;</code> declaration tells the browser that the document is an HTML5 document.
+            </div>
+            
+            <h3>Essential HTML Tags</h3>
+            
+            <h4>Headings</h4>
+            <p>HTML provides six levels of headings, from <code>&lt;h1&gt;</code> (most important) to <code>&lt;h6&gt;</code> (least important).</p>
+            
+            <div class="code-block html">
+<h1>This is a Heading 1</h1>
+<h2>This is a Heading 2</h2>
+<h3>This is a Heading 3</h3>
+<h4>This is a Heading 4</h4>
+<h5>This is a Heading 5</h5>
+<h6>This is a Heading 6</h6>
+            </div>
+            
+            <h4>Paragraphs and Text Formatting</h4>
+            <p>Paragraphs are defined with the <code>&lt;p&gt;</code> tag. You can format text using tags like <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, and <code>&lt;br&gt;</code>.</p>
+            
+            <div class="code-block html">
+<p>This is a paragraph with <strong>bold text</strong> and <em>italicized text</em>.</p>
+<p>This paragraph has a line break.<br>This text appears on a new line.</p>
+            </div>
+            
+            <h4>Lists</h4>
+            <p>HTML supports both ordered (numbered) and unordered (bulleted) lists.</p>
+            
+            <div class="code-block html">
+<!-- Unordered List -->
+<ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+<!-- Ordered List -->
+<ol>
+    <li>First item</li>
+    <li>Second item</li>
+    <li>Third item</li>
+</ol>
+            </div>
+            
+            <h4>Links and Images</h4>
+            <p>Links are created with the <code>&lt;a&gt;</code> tag, and images are inserted with the <code>&lt;img&gt;</code> tag.</p>
+            
+            <div class="code-block html">
+<!-- Link -->
+<a href="https://www.example.com">Visit Example.com</a>
+
+<!-- Image -->
+<img src="image.jpg" alt="Description of the image">
+            </div>
+            
+            <div class="warning">
+                <strong>Important:</strong> Always include the <code>alt</code> attribute in <code>&lt;img&gt;</code> tags for accessibility.
+            </div>
+            
+            <h4>Forms</h4>
+            <p>Forms allow users to input data. They are created with the <code>&lt;form&gt;</code> tag and can contain various input elements.</p>
+            
+            <div class="code-block html">
+<form action="/submit" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <input type="submit" value="Submit">
+</form>
+            </div>
+        </section>
+        
+        <section id="css-fundamentals">
+            <h2>CSS Fundamentals</h2>
+            
+            <h3>What is CSS?</h3>
+            <p>CSS (Cascading Style Sheets) is a language used to style HTML elements. It controls the layout, colors, fonts, and overall appearance of your web pages.</p>
+            
+            <h3>Adding CSS to HTML</h3>
+            <p>There are three ways to include CSS in your HTML:</p>
+            
+            <h4>1. Inline CSS</h4>
+            <div class="code-block html">
+<p style="color: blue; font-size: 16px;">This paragraph has inline CSS.</p>
+            </div>
+            
+            <h4>2. Internal CSS</h4>
+            <div class="code-block html">
+<head>
+    <style>
+        p {
+            color: blue;
+            font-size: 16px;
+        }
+    </style>
+</head>
+            </div>
+            
+            <h4>3. External CSS (Recommended)</h4>
+            <div class="code-block html">
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+            </div>
+            
+            <div class="code-block css">
+/* styles.css */
+p {
+    color: blue;
+    font-size: 16px;
+}
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> External CSS is the preferred method for larger projects as it separates content (HTML) from presentation (CSS).
+            </div>
+            
+            <h3>CSS Selectors</h3>
+            <p>CSS selectors determine which HTML elements to style. Here are the most common types:</p>
+            
+            <div class="code-block css">
+/* Element selector */
+p {
+    color: blue;
+}
+
+/* Class selector */
+.highlight {
+    background-color: yellow;
+}
+
+/* ID selector */
+#header {
+    font-size: 24px;
+}
+
+/* Descendant selector */
+article p {
+    line-height: 1.6;
+}
+
+/* Pseudo-class selector */
+a:hover {
+    text-decoration: underline;
+}
+            </div>
+            
+            <h3>Box Model</h3>
+            <p>Every HTML element is treated as a box in CSS. The box model consists of:</p>
+            <ul>
+                <li><strong>Content</strong> - The actual content of the element</li>
+                <li><strong>Padding</strong> - Space between the content and the border</li>
+                <li><strong>Border</strong> - Line surrounding the padding</li>
+                <li><strong>Margin</strong> - Space outside the border</li>
+            </ul>
+            
+            <div class="code-block css">
+.box {
+    width: 300px;
+    height: 200px;
+    padding: 20px;
+    border: 2px solid black;
+    margin: 30px;
+}
+            </div>
+            
+            <h3>Common CSS Properties</h3>
+            
+            <h4>Typography</h4>
+            <div class="code-block css">
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+h1 {
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+            </div>
+            
+            <h4>Colors and Backgrounds</h4>
+            <div class="code-block css">
+.container {
+    color: #333;                   /* Text color */
+    background-color: #f5f5f5;     /* Background color */
+    border: 1px solid #ddd;        /* Border color */
+}
+
+.gradient {
+    background: linear-gradient(to right, #ff0000, #00ff00);
+}
+            </div>
+            
+            <h4>Layout</h4>
+            <div class="code-block css">
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar {
+    width: 25%;
+    float: left;
+}
+
+.content {
+    width: 75%;
+    float: right;
+}
+            </div>
+        </section>
+        
+        <section id="javascript-intro">
+            <h2>JavaScript Introduction</h2>
+            
+            <h3>What is JavaScript?</h3>
+            <p>JavaScript is a programming language that adds interactivity to websites. It allows you to create dynamic content, validate forms, respond to user actions, and much more.</p>
+            
+            <h3>Adding JavaScript to HTML</h3>
+            <p>JavaScript can be added to HTML in two ways:</p>
+            
+            <h4>1. Internal JavaScript</h4>
+            <div class="code-block html">
+<script>
+    // JavaScript code goes here
+    function greet() {
+        alert("Hello, World!");
+    }
+</script>
+            </div>
+            
+            <h4>2. External JavaScript (Recommended)</h4>
+            <div class="code-block html">
+<script src="script.js"></script>
+            </div>
+            
+            <div class="code-block js">
+// script.js
+function greet() {
+    alert("Hello, World!");
+}
+            </div>
+            
+            <h3>JavaScript Basics</h3>
+            
+            <h4>Variables and Data Types</h4>
+            <div class="code-block js">
+// Variables
+let name = "John";       // String
+let age = 30;            // Number
+let isStudent = true;    // Boolean
+let hobbies = ["reading", "coding", "swimming"];  // Array
+let person = {           // Object
+    firstName: "John",
+    lastName: "Doe",
+    age: 30
+};
+
+// Constants (values that don't change)
+const PI = 3.14159;
+            </div>
+            
+            <h4>Functions</h4>
+            <div class="code-block js">
+// Function declaration
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+// Arrow function (modern syntax)
+const greet = (name) => {
+    return "Hello, " + name + "!";
+};
+
+// Function call
+console.log(greet("John"));  // Outputs: Hello, John!
+            </div>
+            
+            <h4>Conditionals</h4>
+            <div class="code-block js">
+let age = 20;
+
+if (age >= 18) {
+    console.log("You are an adult");
+} else if (age >= 13) {
+    console.log("You are a teenager");
+} else {
+    console.log("You are a child");
+}
+            </div>
+            
+            <h4>Loops</h4>
+            <div class="code-block js">
+// For loop
+for (let i = 0; i < 5; i++) {
+    console.log("Iteration " + i);
+}
+
+// While loop
+let count = 0;
+while (count < 5) {
+    console.log("Count: " + count);
+    count++;
+}
+
+// For...of loop (for arrays)
+const fruits = ["apple", "banana", "orange"];
+for (const fruit of fruits) {
+    console.log(fruit);
+}
+            </div>
+            
+            <h3>DOM Manipulation</h3>
+            <p>The Document Object Model (DOM) is a programming interface for HTML documents. JavaScript can manipulate the DOM to change content, structure, and style of a webpage.</p>
+            
+            <div class="code-block js">
+// Select elements
+const heading = document.getElementById("main-heading");
+const paragraphs = document.getElementsByTagName("p");
+const buttons = document.getElementsByClassName("btn");
+const firstButton = document.querySelector(".btn");
+const allButtons = document.querySelectorAll(".btn");
+
+// Change content
+heading.textContent = "New Heading";
+heading.innerHTML = "New <em>Heading</em>";
+
+// Change styles
+heading.style.color = "blue";
+heading.style.fontSize = "24px";
+
+// Add/remove classes
+heading.classList.add("highlight");
+heading.classList.remove("old-class");
+heading.classList.toggle("active");
+
+// Create new elements
+const newParagraph = document.createElement("p");
+newParagraph.textContent = "This is a new paragraph.";
+document.body.appendChild(newParagraph);
+            </div>
+            
+            <h3>Event Handling</h3>
+            <p>JavaScript can respond to user actions (events) like clicks, keyboard input, mouse movements, etc.</p>
+            
+            <div class="code-block js">
+// Add event listener using JavaScript
+const button = document.getElementById("myButton");
+
+button.addEventListener("click", function() {
+    alert("Button was clicked!");
+});
+
+// Alternative shorthand using HTML attribute
+// <button onclick="alert('Button was clicked!')">Click Me</button>
+            </div>
+        </section>
+        
+        <section id="responsive-design">
+            <h2>Responsive Web Design</h2>
+            
+            <h3>What is Responsive Design?</h3>
+            <p>Responsive web design is an approach that makes web pages render well on all devices and screen sizes. Instead of creating separate websites for different devices, you create one website that adjusts to various screen sizes.</p>
+            
+            <h3>Key Components of Responsive Design</h3>
+            
+            <h4>1. Viewport Meta Tag</h4>
+            <div class="code-block html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </div>
+            <p>This tag ensures that the browser renders the page at the width of the device and sets the initial zoom level.</p>
+            
+            <h4>2. Fluid Layouts</h4>
+            <p>Use relative units (%, em, rem) instead of fixed units (px) for layout elements.</p>
+            
+            <div class="code-block css">
+.container {
+    width: 90%;           /* Relative to parent */
+    max-width: 1200px;    /* Maximum width */
+    margin: 0 auto;       /* Center on page */
+}
+
+.column {
+    width: 33.33%;        /* Fluid columns */
+    float: left;
+    padding: 1rem;        /* Padding based on font size */
+}
+            </div>
+            
+            <h4>3. Media Queries</h4>
+            <p>Media queries allow you to apply different CSS styles based on the characteristics of the device (like screen width).</p>
+            
+            <div class="code-block css">
+/* Base styles for all screen sizes */
+.column {
+    width: 100%;
+    padding: 1rem;
+}
+
+/* Styles for tablets and larger */
+@media (min-width: 768px) {
+    .column {
+        width: 50%;
+        float: left;
+    }
+}
+
+/* Styles for desktops and larger */
+@media (min-width: 1024px) {
+    .column {
+        width: 33.33%;
+    }
+}
+            </div>
+            
+            <h4>4. Flexible Images</h4>
+            <p>Make images scale with their container to prevent overflow on small screens.</p>
+            
+            <div class="code-block css">
+img {
+    max-width: 100%;
+    height: auto;
+}
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Use the mobile-first approach: start with styles for small screens and then add media queries for larger screens.
+            </div>
+            
+            <h3>CSS Flexbox and Grid</h3>
+            <p>Modern CSS layout systems like Flexbox and Grid make responsive design much easier.</p>
+            
+            <h4>Flexbox</h4>
+            <div class="code-block css">
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item {
+    flex: 1 1 300px;  /* Grow, shrink, base width */
+    margin: 1rem;
+}
+            </div>
+            
+            <h4>CSS Grid</h4>
+            <div class="code-block css">
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+            </div>
+            
+            <p>This grid layout automatically adjusts the number of columns based on the available space, with each column being at least 300px wide.</p>
+        </section>
+        
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>MDN Web Docs</h3>
+                    <p>Comprehensive documentation for web technologies, maintained by Mozilla.</p>
+                    <a href="https://developer.mozilla.org/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>W3Schools</h3>
+                    <p>Tutorials and references with simple examples for beginners.</p>
+                    <a href="https://www.w3schools.com/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>CSS-Tricks</h3>
+                    <p>Articles, tutorials, and guides focusing on CSS techniques.</p>
+                    <a href="https://css-tricks.com/" class="btn">Visit</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Web Development Basics. Made with ❤️ for the developer community.</p>
+        </div>
+    </footer>
+    
+    <div class="progress-container">
+        <div>Reading Progress</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Track reading progress
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progress').style.width = scrollPercent + '%';
+        });
+    </script>
+    
+    <!-- HTML Escaping Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all code blocks that have the 'html' class
+            const htmlCodeBlocks = document.querySelectorAll('.code-block.html');
+            
+            // Process each HTML code block
+            htmlCodeBlocks.forEach(function(block) {
+                // Get the original content
+                const originalContent = block.innerHTML;
+                
+                // Escape HTML tags
+                const escapedContent = originalContent
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Set the escaped content back
+                block.innerHTML = escapedContent;
+            });
+        });
+    </script>
+</body>
+</html>

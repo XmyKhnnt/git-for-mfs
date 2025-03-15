@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Framework Fundamentals</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --secondary: #24292e;
+            --bg-light: #f6f8fa;
+            --text: #24292e;
+            --code-bg: #f1f1f1;
+            --border: #e1e4e8;
+            --django: #092e20;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: white;
+        }
+        
+        header {
+            background-color: var(--django);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background-color: var(--bg-light);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--django);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #586069;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--django);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #0c4430;
+        }
+        
+        main {
+            padding: 4rem 0;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--django);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--django);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            white-space: pre;
+        }
+        
+        .code-block::before {
+            content: "Code";
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            background-color: var(--django);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .code-block.python::before {
+            content: "Python";
+        }
+        
+        .code-block.bash::before {
+            content: "Terminal";
+        }
+        
+        .code-block.html::before {
+            content: "HTML";
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--django);
+        }
+        
+        footer {
+            background-color: var(--django);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .progress-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 99;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            width: 200px;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--django);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .progress-container {
+                display: none;
+            }
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 1rem 0 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .django-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .django-flow-item {
+            background-color: var(--django);
+            color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            width: 200px;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .django-flow-item::after {
+            content: "↓";
+            display: block;
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--django);
+        }
+        
+        .django-flow-item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="logo">
+                        <span>Django Fundamentals</span>
+                        <span class="" style="font-size: 10px;">learn.withkhent.com</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="#getting-started">Getting Started</a>
+                    <a href="#models">Models</a>
+                    <a href="#views">Views</a>
+                    <a href="#templates">Templates</a>
+                    <a href="#forms">Forms</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>Django Web Framework</h1>
+            <p>Learn how to build powerful web applications quickly with Django's "batteries-included" approach</p>
+            <a href="#get-started" class="btn">Get Started</a>
+        </div>
+    </div>
+    
+    <main class="container">
+        <section id="get-started">
+            <h2>Why Django?</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Rapid Development</h3>
+                    <p>Django's "batteries-included" philosophy means you can build applications quickly without reinventing the wheel.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Security</h3>
+                    <p>Django includes robust security features by default, helping protect against common vulnerabilities.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📈</div>
+                    <h3>Scalability</h3>
+                    <p>Used by Instagram, Pinterest, and Dropbox, Django can scale to handle millions of users.</p>
+                </div>
+            </div>
+            
+            <h3>Django Overview</h3>
+            <p>Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design. It follows the Model-View-Template (MVT) architectural pattern, which is similar to MVC (Model-View-Controller) but with Django-specific terminology.</p>
+            
+            <div class="django-flow">
+                <div class="django-flow-item">URL Dispatcher</div>
+                <div class="django-flow-item">View</div>
+                <div class="django-flow-item">Model</div>
+                <div class="django-flow-item">Template</div>
+            </div>
+            
+            <p>When a request comes to a Django application:</p>
+            <ol>
+                <li>The <strong>URL dispatcher</strong> determines which view should handle the request</li>
+                <li>The <strong>view</strong> interacts with the model to retrieve or update data</li>
+                <li>The <strong>model</strong> handles data validation and database operations</li>
+                <li>The view passes data to a <strong>template</strong> for rendering</li>
+                <li>The rendered HTML is returned to the user</li>
+            </ol>
+        </section>
+        
+        <section id="getting-started">
+            <h2>Getting Started with Django</h2>
+            
+            <h3>Prerequisites</h3>
+            <p>Before you start, make sure you have:</p>
+            <ul>
+                <li>Python 3.8 or newer installed</li>
+                <li>Basic knowledge of Python programming</li>
+                <li>Understanding of basic web concepts (HTTP, HTML, CSS)</li>
+                <li>A text editor or IDE (VS Code, PyCharm, etc.)</li>
+            </ul>
+            
+            <h3>Installation</h3>
+            <p>The recommended way to install Django is using pip, the Python package manager:</p>
+            
+            <div class="code-block bash">
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install Django
+pip install django
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Always use a virtual environment for your Django projects. This isolates dependencies for each project, preventing conflicts between different projects.
+            </div>
+            
+            <h3>Creating Your First Django Project</h3>
+            <p>Let's create a simple blog application to learn the basics:</p>
+            
+            <div class="code-block bash">
+# Create a new Django project
+django-admin startproject myblog
+
+# Navigate to the project directory
+cd myblog
+
+# Start the development server
+python manage.py runserver
+            </div>
+            
+            <p>You should now be able to visit <code>http://127.0.0.1:8000/</code> in your browser and see Django's welcome page.</p>
+            
+            <h3>Project Structure</h3>
+            <p>Your new Django project will have the following structure:</p>
+            
+            <div class="code-block">
+myblog/                  # Root project directory
+    manage.py            # Command-line utility for administrative tasks
+    myblog/              # Project package
+        __init__.py      # Empty file that tells Python this is a package
+        settings.py      # Project settings/configuration
+        urls.py          # URL declarations for the project
+        asgi.py          # ASGI configuration for deployment
+        wsgi.py          # WSGI configuration for deployment
+            </div>
+            
+            <h3>Creating an App</h3>
+            <p>Django projects are divided into "apps" - modular components that represent different parts of your application:</p>
+            
+            <div class="code-block bash">
+# Create a blog app
+python manage.py startapp blog
+            </div>
+            
+            <p>After creating the app, you need to register it in your project's settings. Open <code>myblog/settings.py</code> and add 'blog' to the <code>INSTALLED_APPS</code> list:</p>
+            
+            <div class="code-block python">
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'blog',  # Add your new app here
+]
+            </div>
+        </section>
+        
+        <section id="models">
+            <h2>Models and Database</h2>
+            
+            <h3>What are Models?</h3>
+            <p>Models are Python classes that define the structure of your database tables. Each model typically corresponds to a single database table.</p>
+            
+            <h3>Creating Models</h3>
+            <p>Let's create models for our blog application. Open <code>blog/models.py</code> and add:</p>
+            
+            <div class="code-block python">
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Categories"
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
+            </div>
+            
+            <h3>Common Field Types</h3>
+            <ul>
+                <li><code>CharField</code> - For small to medium-sized strings</li>
+                <li><code>TextField</code> - For longer text</li>
+                <li><code>IntegerField</code> - For integers</li>
+                <li><code>FloatField</code> - For floating-point numbers</li>
+                <li><code>BooleanField</code> - For true/false values</li>
+                <li><code>DateTimeField</code> - For date and time</li>
+                <li><code>ForeignKey</code> - For one-to-many relationships</li>
+                <li><code>ManyToManyField</code> - For many-to-many relationships</li>
+                <li><code>OneToOneField</code> - For one-to-one relationships</li>
+                <li><code>FileField</code> - For file uploads</li>
+                <li><code>ImageField</code> - For image uploads</li>
+            </ul>
+            
+            <h3>Migrations</h3>
+            <p>After defining your models, you need to create and apply migrations to update your database schema:</p>
+            
+            <div class="code-block bash">
+# Create migrations
+python manage.py makemigrations
+
+# Apply migrations
+python manage.py migrate
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Run migrations every time you change your models to keep your database schema in sync with your code.
+            </div>
+            
+            <h3>Django Admin</h3>
+            <p>Django comes with a powerful admin interface that allows you to manage your data. To use it, first create a superuser:</p>
+            
+            <div class="code-block bash">
+python manage.py createsuperuser
+            </div>
+            
+            <p>Then, register your models in <code>blog/admin.py</code>:</p>
+            
+            <div class="code-block python">
+from django.contrib import admin
+from .models import Category, Post
+
+admin.site.register(Category)
+admin.site.register(Post)
+            </div>
+            
+            <p>Now you can access the admin interface at <code>http://127.0.0.1:8000/admin/</code> and manage your blog posts and categories.</p>
+        </section>
+        
+        <section id="views">
+            <h2>Views and URL Patterns</h2>
+            
+            <h3>What are Views?</h3>
+            <p>Views are Python functions or classes that receive a web request and return a web response. Views access data through models and pass it to templates for rendering.</p>
+            
+            <h3>Creating Function-Based Views</h3>
+            <p>Let's create views for our blog app. Open <code>blog/views.py</code> and add:</p>
+            
+            <div class="code-block python">
+from django.shortcuts import render, get_object_or_404
+from .models import Post, Category
+
+def home(request):
+    posts = Post.objects.all().order_by('-date_posted')
+    context = {
+        'posts': posts,
+        'title': 'Home'
+    }
+    return render(request, 'blog/home.html', context)
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    context = {
+        'post': post,
+        'title': post.title
+    }
+    return render(request, 'blog/post_detail.html', context)
+
+def category_posts(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    posts = Post.objects.filter(category=category).order_by('-date_posted')
+    context = {
+        'category': category,
+        'posts': posts,
+        'title': f'Category: {category.name}'
+    }
+    return render(request, 'blog/category_posts.html', context)
+            </div>
+            
+            <h3>URL Patterns</h3>
+            <p>URL patterns map URLs to views. First, create a <code>blog/urls.py</code> file:</p>
+            
+            <div class="code-block python">
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='blog-home'),
+    path('post/<int:post_id>/', views.post_detail, name='post-detail'),
+    path('category/<int:category_id>/', views.category_posts, name='category-posts'),
+]
+            </div>
+            
+            <p>Then, update the project's main URL configuration in <code>myblog/urls.py</code>:</p>
+            
+            <div class="code-block python">
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+            </div>
+            
+            <h3>Class-Based Views</h3>
+            <p>Django also supports class-based views, which can help organize code and provide reusable functionality:</p>
+            
+            <div class="code-block python">
+from django.views.generic import ListView, DetailView
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+    paginate_by = 5
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+            </div>
+            
+            <p>To use class-based views, update your URL patterns:</p>
+            
+            <div class="code-block python">
+from django.urls import path
+from . import views
+from .views import PostListView, PostDetailView
+
+urlpatterns = [
+    path('', PostListView.as_view(), name='blog-home'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('category/<int:category_id>/', views.category_posts, name='category-posts'),
+]
+            </div>
+        </section>
+        
+        <section id="templates">
+            <h2>Templates</h2>
+            
+            <h3>Template Basics</h3>
+            <p>Templates are HTML files with Django Template Language (DTL) that allow you to dynamically generate HTML. Create the following directory structure for templates:</p>
+            
+            <div class="code-block">
+blog/
+    templates/
+        blog/
+            base.html
+            home.html
+            post_detail.html
+            category_posts.html
+            </div>
+            
+            <h3>Base Template</h3>
+            <p>Create a base template that other templates will extend (<code>blog/templates/blog/base.html</code>):</p>
+            
+            <div class="code-block html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Blog{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'blog-home' %}">My Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog-home' %}">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p>&copy; 2025 My Blog</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+            </div>
+            
+            <h3>Home Template</h3>
+            <p>Create a template for the home page (<code>blog/templates/blog/home.html</code>):</p>
+            
+            <div class="code-block html">
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    {{ title }} - My Blog
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Latest Posts</h1>
+    
+    {% for post in posts %}
+        <article class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ post.title }}</h2>
+                <p class="card-text text-muted">
+                    {{ post.date_posted|date:"F d, Y" }} by {{ post.author.username }}
+                    {% if post.category %}
+                        in <a href="{% url 'category-posts' post.category.id %}">{{ post.category.name }}</a>
+                    {% endif %}
+                </p>
+                <p class="card-text">{{ post.content|truncatewords:50 }}</p>
+                <a href="{% url 'post-detail' post.id %}" class="btn btn-primary">Read More</a>
+            </div>
+        </article>
+    {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+    
+    {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% endblock %}
+            </div>
+            
+            <h3>Template Tags and Filters</h3>
+            <p>Django Template Language includes various tags and filters:</p>
+            <ul>
+                <li><strong>Tags</strong>: {% raw %}{% tag %}{% endraw %} - Control flow, looping, etc.</li>
+                <li><strong>Variables</strong>: {% raw %}{{ variable }}{% endraw %} - Display content</li>
+                <li><strong>Filters</strong>: {% raw %}{{ variable|filter }}{% endraw %} - Transform content</li>
+            </ul>
+            
+            <p>Common tags and filters:</p>
+            <ul>
+                <li>{% raw %}{% if %}, {% elif %}, {% else %}, {% endif %}{% endraw %} - Conditional rendering</li>
+                <li>{% raw %}{% for %}, {% empty %}, {% endfor %}{% endraw %} - Looping</li>
+                <li>{% raw %}{% url 'name' %}{% endraw %} - URL reversing</li>
+                <li>{% raw %}{% block %}, {% extends %}{% endraw %} - Template inheritance</li>
+                <li>{% raw %}{{ value|default:"" }}{% endraw %} - Default value if empty</li>
+                <li>{% raw %}{{ value|truncatewords:30 }}{% endraw %} - Limit words</li>
+                <li>{% raw %}{{ value|date:"F j, Y" }}{% endraw %} - Format date</li>
+            </ul>
+        </section>
+        
+        <section id="forms">
+            <h2>Forms and User Input</h2>
+            
+            <h3>Django Forms</h3>
+            <p>Django forms help you handle user input, validation, and security. Create a <code>blog/forms.py</code> file:</p>
+            
+            <div class="code-block python">
+from django import forms
+from .models import Post, Category
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'category']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+            </div>
+            
+            <h3>Creating a New Post View</h3>
+            <p>Add a view to handle form submission:</p>
+            
+            <div class="code-block python">
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import PostForm
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('post-detail', post_id=post.id)
+    else:
+        form = PostForm()
+    
+    return render(request, 'blog/create_post.html', {'form': form, 'title': 'Create Post'})
+            </div>
+            
+            <p>Update <code>blog/urls.py</code> to include the new view:</p>
+            
+            <div class="code-block python">
+path('post/new/', views.create_post, name='create-post'),
+            </div>
+            
+            <h3>Create Post Template</h3>
+            <p>Create <code>blog/templates/blog/create_post.html</code>:</p>
+            
+            <div class="code-block html">
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    {{ title }} - My Blog
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Create New Post</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+            {{ form.category }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.content.id_for_label }}" class="form-label">Content</label>
+            {{ form.content }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
+            </div>
+            
+            <div class="tip">
+                <strong>Security Note:</strong> Always include the {% raw %}{% csrf_token %}{% endraw %} tag in your forms to protect against Cross-Site Request Forgery attacks.
+            </div>
+            
+            <h3>Form Validation</h3>
+            <p>Django automatically validates form input based on model fields. You can add custom validation by overriding the <code>clean</code> method:</p>
+            
+            <div class="code-block python">
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'category']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+    
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if len(title) < 5:
+            raise forms.ValidationError("Title must be at least 5 characters long.")
+        return title
+            </div>
+        </section>
+        
+        <section id="authentication">
+            <h2>User Authentication</h2>
+            
+            <h3>User Registration</h3>
+            <p>Django's authentication system makes it easy to handle user accounts. Create a new app for user management:</p>
+            
+            <div class="code-block bash">
+python manage.py startapp users
+            </div>
+            
+            <p>Add 'users' to <code>INSTALLED_APPS</code> in <code>settings.py</code>.</p>
+            
+            <p>Create a registration form in <code>users/forms.py</code>:</p>
+            
+            <div class="code-block python">
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+            </div>
+            
+            <p>Create views in <code>users/views.py</code>:</p>
+            
+            <div class="code-block python">
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import UserRegisterForm
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}! You can now log in.')
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'users/register.html', {'form': form})
+            </div>
+            
+            <p>Add URL patterns in <code>myblog/urls.py</code>:</p>
+            
+            <div class="code-block python">
+from django.contrib import admin
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from users import views as user_views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('register/', user_views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    path('', include('blog.urls')),
+]
+            </div>
+            
+            <p>Create templates for user authentication in <code>users/templates/users/</code>.</p>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Django's built-in authentication views handle login, logout, password reset, and more. You just need to provide templates.
+            </div>
+        </section>
+        
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Official Django Documentation</h3>
+                    <p>Comprehensive and well-organized documentation for Django.</p>
+                    <a href="https://docs.djangoproject.com/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>Django for Beginners</h3>
+                    <p>An excellent book for beginners by William S. Vincent.</p>
+                    <a href="https://djangoforbeginners.com/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>MDN Django Tutorial</h3>
+                    <p>Mozilla's tutorial on building a library catalog with Django.</p>
+                    <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django" class="btn">Visit</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Django Fundamentals. Made with ❤️ for the developer community.</p>
+        </div>
+    </footer>
+    
+    <div class="progress-container">
+        <div>Reading Progress</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Track reading progress
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progress').style.width = scrollPercent + '%';
+        });
+    </script>
+    
+    <!-- HTML Escaping Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all code blocks that have the 'html' class
+            const htmlCodeBlocks = document.querySelectorAll('.code-block.html');
+            
+            // Process each HTML code block
+            htmlCodeBlocks.forEach(function(block) {
+                // Get the original content
+                const originalContent = block.innerHTML;
+                
+                // Escape HTML tags
+                const escapedContent = originalContent
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Set the escaped content back
+                block.innerHTML = escapedContent;
+            });
+        });
+    </script>
+</body>
+</html>

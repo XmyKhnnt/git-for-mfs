@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git & GitHub for Students</title>
+    <title>Web Development Tutorials | learn.withkhent.com</title>
     <style>
         :root {
             --primary: #2ea44f;
             --secondary: #24292e;
+            --django: #092e20;
+            --deploy: #0366d6;
+            --web: #e34c26;
             --bg-light: #f6f8fa;
             --text: #24292e;
             --code-bg: #f1f1f1;
@@ -145,29 +148,6 @@
             font-size: 0.9rem;
         }
         
-        .code-block {
-            background-color: var(--code-bg);
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-            font-family: 'Courier New', Courier, monospace;
-            position: relative;
-        }
-        
-        .code-block::before {
-            content: "Terminal";
-            position: absolute;
-            top: 0;
-            right: 1rem;
-            background-color: var(--secondary);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            font-size: 0.7rem;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-        }
-        
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -178,9 +158,11 @@
         .card {
             background-color: white;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 10px;
             padding: 1.5rem;
             transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
         }
         
         .card:hover {
@@ -193,9 +175,102 @@
         }
         
         .card-icon {
-            font-size: 2rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .card.git .card-icon {
             color: var(--primary);
+        }
+        
+        .card.django .card-icon {
+            color: var(--django);
+        }
+        
+        .card.web .card-icon {
+            color: var(--web);
+        }
+        
+        .card.deploy .card-icon {
+            color: var(--deploy);
+        }
+        
+        .card-content {
+            flex-grow: 1;
+        }
+        
+        .card-topics {
+            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .topic-tag {
+            background-color: var(--bg-light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card.git .btn {
+            background-color: var(--primary);
+        }
+        
+        .card.git .btn:hover {
+            background-color: #2c974b;
+        }
+        
+        .card.django .btn {
+            background-color: var(--django);
+        }
+        
+        .card.django .btn:hover {
+            background-color: #0c4430;
+        }
+        
+        .card.web .btn {
+            background-color: var(--web);
+        }
+        
+        .card.web .btn:hover {
+            background-color: #c13e1d;
+        }
+        
+        .card.deploy .btn {
+            background-color: var(--deploy);
+        }
+        
+        .card.deploy .btn:hover {
+            background-color: #0255b3;
+        }
+        
+        .level-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #586069;
+            font-size: 0.9rem;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        
+        .dot.active {
+            background-color: #586069;
         }
         
         footer {
@@ -205,33 +280,33 @@
             text-align: center;
         }
         
-        .progress-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background-color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .feature-section {
+            background-color: var(--bg-light);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 10px;
+        }
+        
+        .feature-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 250px;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            z-index: 99;
+            align-items: center;
+            text-align: center;
         }
         
-        .progress-bar {
-            height: 10px;
-            width: 200px;
-            background-color: var(--bg-light);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: var(--primary);
-            width: 0%;
-            transition: width 0.3s;
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
         }
         
         @media (max-width: 768px) {
@@ -246,34 +321,6 @@
             .hero p {
                 font-size: 1rem;
             }
-            
-            .progress-container {
-                display: none;
-            }
-        }
-        
-        .screenshot {
-            max-width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin: 1rem 0 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tip {
-            background-color: #d1ecf1;
-            border-left: 4px solid #0c5460;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 0 6px 6px 0;
-        }
-        
-        .warning {
-            background-color: #fff3cd;
-            border-left: 4px solid #856404;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 0 6px 6px 0;
         }
     </style>
 </head>
@@ -281,16 +328,17 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo">
-                   
-                    <span>Git & GitHub for MFs</span>
-                    <span class="" style="font-size: 10px;">Many Freelancers</span>
-                </div>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="logo">
+                        <span>learn.withkhent.com</span>
+                        <span class="" style="font-size: 10px;">Web Development Tutorials</span>
+                    </div>
+                </a>
                 <div class="nav-links">
-                    <a href="#git-basics">Git Basics</a>
-                    <a href="#github-essentials">GitHub</a>
-                    <a href="#collaboration">Collaboration</a>
-                    <a href="#advanced">Advanced</a>
+                    <a href="#tutorials">Tutorials</a>
+                    <a href="#about">About</a>
+                    <a href="#roadmap">Learning Path</a>
+                    <a href="#contact">Contact</a>
                 </div>
             </nav>
         </div>
@@ -298,305 +346,195 @@
     
     <div class="hero">
         <div class="container">
-            <h1 class="bg-green-900">Master Git & GitHub</h1>
-            <p>Learn version control and collaboration skills that will serve you throughout your entire career</p>
-            <a href="#get-started" class="btn">Get Started</a>
+            <h1>Learn Web Development</h1>
+            <p>Practical, step-by-step tutorials to help you master modern web development skills</p>
+            <a href="#tutorials" class="btn">Explore Tutorials</a>
         </div>
     </div>
     
     <main class="container">
-        <section id="get-started">
-            <h2>Why Learn Git & GitHub?</h2>
+        <section id="tutorials">
+            <h2>Featured Tutorials</h2>
             <div class="card-container">
-                <div class="card">
+                <div class="card web">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-content">
+                        <h3>Web Development Basics</h3>
+                        <p>Learn the core technologies that power modern websites and web applications.</p>
+                        <div class="card-topics">
+                            <span class="topic-tag">HTML</span>
+                            <span class="topic-tag">CSS</span>
+                            <span class="topic-tag">JavaScript</span>
+                            <span class="topic-tag">Responsive Design</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Beginner</span>
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <a href="web_basics.html" class="btn">Start Learning</a>
+                    </div>
+                </div>
+                
+                <div class="card git">
                     <div class="card-icon">📝</div>
-                    <h3>Track Changes</h3>
-                    <p>Keep a complete history of your code, with the ability to revert to any previous version at any time.</p>
+                    <div class="card-content">
+                        <h3>Git & GitHub</h3>
+                        <p>Master version control and collaboration skills essential for modern development workflows.</p>
+                        <div class="card-topics">
+                            <span class="topic-tag">Git</span>
+                            <span class="topic-tag">GitHub</span>
+                            <span class="topic-tag">Version Control</span>
+                            <span class="topic-tag">Collaboration</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Beginner</span>
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <a href="git_github.html" class="btn">Start Learning</a>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="card-icon">👥</div>
-                    <h3>Collaborate</h3>
-                    <p>Work seamlessly with others on the same project without overwriting each other's changes.</p>
+                
+                <div class="card django">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-content">
+                        <h3>Django Framework</h3>
+                        <p>Build powerful web applications quickly with Django's "batteries-included" approach.</p>
+                        <div class="card-topics">
+                            <span class="topic-tag">Python</span>
+                            <span class="topic-tag">Django</span>
+                            <span class="topic-tag">Backend</span>
+                            <span class="topic-tag">MVT Pattern</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Intermediate</span>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <a href="django.html" class="btn">Start Learning</a>
+                    </div>
                 </div>
-                <div class="card">
+                
+                <div class="card deploy">
                     <div class="card-icon">🚀</div>
-                    <h3>Build Your Portfolio</h3>
-                    <p>Showcase your work to potential employers and contribute to open-source projects.</p>
+                    <div class="card-content">
+                        <h3>Web Application Deployment</h3>
+                        <p>Learn how to take your web applications from development to production with confidence.</p>
+                        <p><small><strong>Bonus:</strong> Check out our <a href="https://github.com/XmyKhnnt/docker-deploy-templates">Docker templates repository</a> for ready-to-use deployment configurations!</small></p>
+                        <div class="card-topics">
+                            <span class="topic-tag">Deployment</span>
+                            <span class="topic-tag">Docker</span>
+                            <span class="topic-tag">Cloud</span>
+                            <span class="topic-tag">DevOps</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Advanced</span>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                        </div>
+                        <a href="web_deploy.html" class="btn">Start Learning</a>
+                    </div>
                 </div>
-            </div>
-        </section>
-        
-        <section id="git-basics">
-            <h2>Git Basics</h2>
-            
-            <h3>Getting Started with Git</h3>
-            <p>Git is a distributed version control system that helps you track changes to files and coordinate work among multiple people.</p>
-            
-            <h4>1. Installing Git</h4>
-            <p>First, you need to install Git on your computer:</p>
-            <ul>
-                <li><strong>Windows:</strong> Download from <a href="https://git-scm.com/download/win">git-scm.com</a></li>
-                <li><strong>Mac:</strong> Install with Homebrew using <code>brew install git</code> or download from <a href="https://git-scm.com/download/mac">git-scm.com</a></li>
-                <li><strong>Linux:</strong> Use your package manager, e.g., <code>sudo apt-get install git</code></li>
-            </ul>
-            
-            <h4>2. Configuring Git</h4>
-            <p>After installation, set up your identity:</p>
-            <div class="code-block">
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-            </div>
-            
-            <h3>Creating Your First Repository</h3>
-            <p>A repository (or "repo") is a project that Git tracks. Let's create one:</p>
-            
-            <div class="code-block">
-# Create a new directory
-mkdir my-first-project
-cd my-first-project
-
-# Initialize a Git repository
-git init
-            </div>
-            
-            <div class="tip">
-                <strong>Tip:</strong> The <code>git init</code> command creates a hidden .git directory that stores all the version history for your project.
-            </div>
-            
-            <h3>Understanding the Git Workflow</h3>
-            <p>Git has three main states that your files can live in:</p>
-            <ol>
-                <li><strong>Working Directory:</strong> Where you modify files</li>
-                <li><strong>Staging Area (Index):</strong> Where you mark files ready to be saved</li>
-                <li><strong>Repository:</strong> Where Git permanently stores changes as commits</li>
-            </ol>
-            
-            <img src="gitworkflow.png" alt="Git Workflow Diagram" class="screenshot">
-            
-            <h3>Basic Git Commands</h3>
-            
-            <h4>Tracking Changes</h4>
-            <div class="code-block">
-# Check which files have been modified
-git status
-
-# Add files to the staging area
-git add filename.txt    # Add a specific file
-git add .               # Add all files
-
-# Commit changes to the repository
-git commit -m "Add a descriptive message about your changes"
-            </div>
-            
-            <h4>Viewing History</h4>
-            <div class="code-block">
-# View commit history
-git log
-
-# View commit history with a graph
-git log --graph --oneline --all
-            </div>
-        </section>
-        
-        <section id="github-essentials">
-            <h2>GitHub Essentials</h2>
-            
-            <h3>What is GitHub?</h3>
-            <p>GitHub is a web-based hosting service for Git repositories. It adds many collaboration features on top of Git, including:</p>
-            <ul>
-                <li>Issues and pull requests for project management</li>
-                <li>Code review tools</li>
-                <li>Project wikis and websites</li>
-                <li>Social coding features</li>
-            </ul>
-            
-            <h3>Creating a GitHub Account</h3>
-            <p>Visit <a href="https://github.com">github.com</a> and sign up for a free account. Students can get additional benefits through the <a href="https://education.github.com/pack">GitHub Student Developer Pack</a>.</p>
-            
-            <h3>Connecting to GitHub</h3>
-            <p>To connect your local Git repository to GitHub:</p>
-            
-            <h4>1. Create a new repository on GitHub</h4>
-            <p>Go to GitHub, click the "+" icon in the top right, and select "New repository".</p>
-            
-            <h4>2. Connect your local repository</h4>
-            <div class="code-block">
-# Add the GitHub repository as a remote
-git remote add origin https://github.com/yourusername/your-repo-name.git
-
-# Push your code to GitHub
-git push -u origin main
-            </div>
-            
-            <div class="warning">
-                <strong>Note:</strong> GitHub now uses "main" as the default branch name instead of "master". If you're using an older version of Git, you might need to use <code>git push -u origin master</code> instead.
-            </div>
-            
-            <h3>GitHub Workflow</h3>
-            <p>Once your repository is on GitHub, follow this workflow to make changes:</p>
-            
-            <div class="code-block">
-# Pull the latest changes from GitHub
-git pull origin main
-
-# Make your changes locally
-# ...
-
-# Add and commit your changes
-git add .
-git commit -m "Describe your changes"
-
-# Push your changes to GitHub
-git push origin main
-            </div>
-        </section>
-        
-        <section id="collaboration">
-            <h2>Collaborating with Others</h2>
-            
-            <h3>Branching Strategy</h3>
-            <p>Branches allow you to develop features isolated from each other. Here's a typical workflow:</p>
-            
-            <div class="code-block">
-# Create a new feature branch
-git checkout -b feature-name
-
-# Make changes, add, and commit
-
-# Push the branch to GitHub
-git push origin feature-name
-            </div>
-            
-            <h3>Pull Requests</h3>
-            <p>Pull requests are GitHub's way to propose changes to a repository:</p>
-            <ol>
-                <li>Push your branch to GitHub</li>
-                <li>Go to the repository on GitHub</li>
-                <li>Click "Compare & pull request"</li>
-                <li>Add a title and description</li>
-                <li>Click "Create pull request"</li>
-            </ol>
-            
-            <img src="pr.png" alt="Pull Request Example" class="screenshot">
-            
-            <h3>Code Reviews</h3>
-            <p>Code reviews help maintain code quality and share knowledge:</p>
-            <ul>
-                <li>Reviewers can comment on specific lines of code</li>
-                <li>Discuss implementation details and alternatives</li>
-                <li>Approve or request changes to the pull request</li>
-            </ul>
-            
-            <h3>Handling Merge Conflicts</h3>
-            <p>Merge conflicts occur when Git can't automatically merge changes:</p>
-            
-            <div class="code-block">
-# When you get a merge conflict, git status will show you the conflicting files
-git status
-
-# Open the files and resolve the conflicts manually
-# Look for conflict markers: <<<<<<< HEAD, =======, and >>>>>>>
-
-# After resolving, add the files
-git add .
-
-# Complete the merge
-git commit -m "Resolve merge conflicts"
-            </div>
-            
-            <div class="tip">
-                <strong>Tip:</strong> Many code editors like VS Code have built-in tools to help resolve merge conflicts.
-            </div>
-        </section>
-        
-        <section id="advanced">
-            <h2>Advanced Git & GitHub Techniques</h2>
-            
-            <h3>GitHub Actions (CI/CD)</h3>
-            <p>GitHub Actions allows you to automate workflows like testing and deployment directly from your repository.</p>
-            
-            <h3>GitHub Pages</h3>
-            <p>Host websites directly from your GitHub repository. Great for portfolios, documentation, and project websites.</p>
-            
-            <h3>Useful Git Commands</h3>
-            
-            <h4>Undoing Changes</h4>
-            <div class="code-block">
-# Undo uncommitted changes to a file
-git checkout -- filename.txt
-
-# Undo staged changes
-git reset HEAD filename.txt
-
-# Undo a commit (creates a new commit that reverses changes)
-git revert commit-hash
-
-# Amend the previous commit
-git commit --amend -m "New commit message"
-            </div>
-            
-            <h4>Stashing Changes</h4>
-            <div class="code-block">
-# Save changes temporarily without committing
-git stash
-
-# Apply stashed changes
-git stash pop
-            </div>
-            
-            <h4>Tagging Releases</h4>
-            <div class="code-block">
-# Create a tag
-git tag v1.0.0
-
-# Push tags to GitHub
-git push origin --tags
             </div>
         </section>
         
         <section id="resources">
             <h2>Additional Resources</h2>
             
-            <div class="card-container">
-                <div class="card">
-                    <h3>Git Documentation</h3>
-                    <p>The official Git documentation is comprehensive and well-written.</p>
-                    <a href="https://git-scm.com/doc" class="btn">Visit</a>
-                </div>
-                <div class="card">
-                    <h3>GitHub Learning Lab</h3>
-                    <p>Interactive courses to learn Git and GitHub through practical exercises.</p>
-                    <a href="https://lab.github.com/" class="btn">Visit</a>
-                </div>
-                <div class="card">
-                    <h3>Oh Sh*t, Git!?!</h3>
-                    <p>Common Git mistakes and how to fix them. (Warning: contains profanity)</p>
-                    <a href="https://ohshitgit.com/" class="btn">Visit</a>
+            <div class="card" style="border-left: 4px solid var(--deploy); padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem;">
+                <div style="flex-shrink: 0; font-size: 3rem; color: var(--deploy);">🐳</div>
+                <div style="flex-grow: 1;">
+                    <h3 style="margin-top: 0;">Docker Deployment Templates</h3>
+                    <p>Ready-to-use Docker templates for deploying various web applications. Perfect companion to the deployment tutorial!</p>
+                    <p><strong>Includes templates for:</strong> Django, Node.js, React, Flask, and more.</p>
+                    <a href="https://github.com/XmyKhnnt/docker-deploy-templates" class="btn" style="background-color: var(--deploy);">View Repository</a>
                 </div>
             </div>
         </section>
+        
+        <section id="roadmap">
+            <h2>Suggested Learning Path</h2>
+            <p>Follow this recommended order to build your skills step by step:</p>
+            
+            <ol>
+                <li><strong><a href="web_basics.html">Web Development Basics</a></strong> - Start with HTML, CSS, and JavaScript fundamentals</li>
+                <li><strong><a href="git_github.html">Git & GitHub</a></strong> - Learn version control to manage your code</li>
+                <li><strong><a href="django.html">Django Framework</a></strong> - Master backend development with Python</li>
+                <li><strong><a href="web_deploy.html">Web Application Deployment</a></strong> - Deploy your applications to production</li>
+            </ol>
+            
+            <p>Each tutorial builds on skills from previous ones, creating a comprehensive learning journey.</p>
+        </section>
+        
+        <section class="feature-section">
+            <div class="container">
+                <h2 style="text-align: center; border-bottom: none; margin-bottom: 2rem;">Why These Tutorials?</h2>
+                
+                <div class="feature-container">
+                    <div class="feature">
+                        <div class="feature-icon">📚</div>
+                        <h3>Comprehensive</h3>
+                        <p>Each tutorial covers everything from basic concepts to practical implementation details.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Practical</h3>
+                        <p>Focus on hands-on examples and real-world scenarios you'll encounter in actual projects.</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Up-to-date</h3>
+                        <p>Regularly updated content that reflects current best practices and industry standards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about">
+            <h2>About These Tutorials</h2>
+            <p>These tutorials were created to provide a clear, practical path to learning modern web development skills. Whether you're a complete beginner or looking to expand your skillset, our step-by-step guides will help you build a solid foundation in web technologies.</p>
+            
+            <p>Each tutorial focuses on practical, real-world examples rather than abstract theory. By the end of each guide, you'll have built something concrete and gained hands-on experience with the tools and techniques used by professional developers.</p>
+            
+            <p>The content is regularly updated to ensure it reflects current best practices and the latest features of each technology.</p>
+        </section>
+        
+        <section id="contact">
+            <h2>Get in Touch</h2>
+            <p>Have questions, suggestions, or feedback about the tutorials? We'd love to hear from you!</p>
+            
+            <p>Email us at: <a href="mailto:hello@withkhent.com">hello@withkhent.com</a></p>
+        
+        </section>
     </main>
     
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Git & GitHub for Students. Made with ❤️ for the developer community.</p>
-        </div>
-    </footer>
-    
-    <div class="progress-container">
-        <div>Reading Progress</div>
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-    </div>
+  
     
     <script>
-        // Track reading progress
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.scrollY;
-            const docHeight = document.body.offsetHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            document.getElementById('progress').style.width = scrollPercent + '%';
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

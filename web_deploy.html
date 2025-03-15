@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Application Deployment Guide</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --secondary: #24292e;
+            --bg-light: #f6f8fa;
+            --text: #24292e;
+            --code-bg: #f1f1f1;
+            --border: #e1e4e8;
+            --deploy: #0366d6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: white;
+        }
+        
+        header {
+            background-color: var(--deploy);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background-color: var(--bg-light);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--deploy);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #586069;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--deploy);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #0255b3;
+        }
+        
+        main {
+            padding: 4rem 0;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--deploy);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--deploy);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            white-space: pre;
+        }
+        
+        .code-block::before {
+            content: "Code";
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            background-color: var(--deploy);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .code-block.bash::before {
+            content: "Terminal";
+        }
+        
+        .code-block.python::before {
+            content: "Python";
+        }
+        
+        .code-block.nginx::before {
+            content: "Nginx";
+        }
+        
+        .code-block.env::before {
+            content: ".env";
+        }
+        
+        .code-block.dockerfile::before {
+            content: "Dockerfile";
+        }
+        
+        .code-block.compose::before {
+            content: "docker-compose.yml";
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--deploy);
+        }
+        
+        footer {
+            background-color: var(--deploy);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .progress-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 99;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            width: 200px;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--deploy);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .progress-container {
+                display: none;
+            }
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 1rem 0 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .checklist {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .checklist h4 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--deploy);
+        }
+        
+        .checklist ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .checklist li {
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 0.8rem;
+        }
+        
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: var(--deploy);
+        }
+        
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .compare-table th, .compare-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .compare-table th {
+            background-color: var(--bg-light);
+            font-weight: 600;
+        }
+        
+        .compare-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="logo">
+                        <span>Deployment Guide</span>
+                        <span class="" style="font-size: 10px;">learn.withkhent.com</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="#preparation">Preparation</a>
+                    <a href="#traditional">Traditional</a>
+                    <a href="#docker">Docker</a>
+                    <a href="#cloud">Cloud Platforms</a>
+                    <a href="#serverless">Serverless</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>Web Application Deployment</h1>
+            <p>Learn how to take your web applications from development to production with confidence</p>
+            <a href="#get-started" class="btn">Get Started</a>
+        </div>
+    </div>
+    
+    <main class="container">
+        <section id="get-started">
+            <h2>Why Deployment Matters</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Share Your Work</h3>
+                    <p>Deployment allows you to share your applications with users around the world.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Security & Reliability</h3>
+                    <p>Proper deployment practices ensure your application is secure, stable, and available.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Scale & Grow</h3>
+                    <p>A well-deployed application can scale to handle increased traffic and user demand.</p>
+                </div>
+            </div>
+            
+            <h3>Deployment Options Overview</h3>
+            <p>When it comes to deploying web applications, you have several approaches to choose from:</p>
+            
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Deployment Type</th>
+                        <th>Best For</th>
+                        <th>Complexity</th>
+                        <th>Cost</th>
+                        <th>Scalability</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Traditional (VPS)</td>
+                        <td>Full control, custom configurations</td>
+                        <td>High</td>
+                        <td>Medium</td>
+                        <td>Manual</td>
+                    </tr>
+                    <tr>
+                        <td>PaaS (Heroku, etc.)</td>
+                        <td>Quick deployment, less maintenance</td>
+                        <td>Low</td>
+                        <td>Medium-High</td>
+                        <td>Easy</td>
+                    </tr>
+                    <tr>
+                        <td>Docker/Containers</td>
+                        <td>Consistent environments, microservices</td>
+                        <td>Medium</td>
+                        <td>Varies</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td>Serverless</td>
+                        <td>Event-driven, variable workloads</td>
+                        <td>Medium</td>
+                        <td>Pay-per-use</td>
+                        <td>Automatic</td>
+                    </tr>
+                    <tr>
+                        <td>Static Hosting</td>
+                        <td>Static websites, SPAs</td>
+                        <td>Very Low</td>
+                        <td>Low/Free</td>
+                        <td>Excellent</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>In this tutorial, we'll cover the most common deployment methods for web applications, focusing on practical steps and best practices.</p>
+        </section>
+        
+        <section id="preparation">
+            <h2>Preparing Your Application for Deployment</h2>
+            
+            <h3>Development vs. Production Settings</h3>
+            <p>Before deploying, your application needs different settings for production than it uses in development:</p>
+            
+            <div class="checklist">
+                <h4>Production Checklist</h4>
+                <ul>
+                    <li>Set DEBUG=False (in Django/Flask)</li>
+                    <li>Configure secure, production-ready database</li>
+                    <li>Set up proper error logging</li>
+                    <li>Enable HTTPS and security headers</li>
+                    <li>Use environment variables for sensitive settings</li>
+                    <li>Optimize static files (minification, compression)</li>
+                    <li>Set up backups</li>
+                </ul>
+            </div>
+            
+            <h3>Environment Variables</h3>
+            <p>Never hardcode sensitive information like API keys, database credentials, or secret keys in your code. Use environment variables instead:</p>
+            
+            <div class="code-block env">
+# Example .env file (DO NOT commit this to version control)
+SECRET_KEY=your_secret_key_here
+DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+ALLOWED_HOSTS=example.com,www.example.com
+DEBUG=False
+            </div>
+            
+            <p>In a Django application, you can use django-environ to load environment variables:</p>
+            
+            <div class="code-block python">
+# settings.py
+import environ
+
+env = environ.Env()
+# Read .env file if it exists
+environ.Env.read_env()
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+DATABASES = {
+    'default': env.db(),
+}
+            </div>
+            
+            <h3>Static and Media Files</h3>
+            <p>In production, static files (CSS, JavaScript, images) should be served efficiently:</p>
+            
+            <h4>Options for Serving Static Files:</h4>
+            <ol>
+                <li><strong>Web Server</strong>: Configure Nginx or Apache to serve static files directly</li>
+                <li><strong>CDN</strong>: Use a Content Delivery Network like Cloudflare or AWS CloudFront</li>
+                <li><strong>Object Storage</strong>: Store files in services like AWS S3 or Google Cloud Storage</li>
+            </ol>
+            
+            <p>For a Django application, set up static file settings for production:</p>
+            
+            <div class="code-block python">
+# settings.py
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional locations of static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# For user-uploaded content
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+            </div>
+            
+            <h3>Database Considerations</h3>
+            <p>For production deployments, you should:</p>
+            <ul>
+                <li>Use a production-grade database (PostgreSQL recommended for most apps)</li>
+                <li>Set up proper database backups</li>
+                <li>Consider read replicas for high-traffic applications</li>
+                <li>Never use SQLite for production Django applications</li>
+            </ul>
+            
+            <div class="warning">
+                <strong>Important:</strong> Before deploying, always test your application thoroughly with production settings locally.
+            </div>
+        </section>
+        
+        <section id="traditional">
+            <h2>Traditional Server Deployment</h2>
+            
+            <h3>Setting Up a VPS (Virtual Private Server)</h3>
+            <p>A VPS gives you complete control over your server environment. Popular providers include:</p>
+            <ul>
+                <li>DigitalOcean</li>
+                <li>Linode</li>
+                <li>AWS EC2</li>
+                <li>Google Compute Engine</li>
+                <li>Microsoft Azure VMs</li>
+            </ul>
+            
+            <h3>Initial Server Setup</h3>
+            <p>After creating a VPS, follow these steps to secure and prepare it:</p>
+            
+            <div class="code-block bash">
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Create a non-root user with sudo privileges
+sudo adduser deploy
+sudo usermod -aG sudo deploy
+
+# Set up SSH key authentication
+# (Generate keys locally with ssh-keygen if needed)
+# On your local machine:
+ssh-copy-id deploy@your_server_ip
+
+# Disable password authentication (after confirming SSH key works)
+sudo nano /etc/ssh/sshd_config
+# Set PasswordAuthentication no
+sudo systemctl restart sshd
+
+# Set up a simple firewall
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
+            </div>
+            
+            <h3>Installing Dependencies</h3>
+            <p>Install the necessary software for your web application:</p>
+            
+            <div class="code-block bash">
+# For a Python/Django application
+sudo apt install python3 python3-pip python3-venv nginx
+            
+# For a database (PostgreSQL)
+sudo apt install postgresql postgresql-contrib
+            </div>
+            
+            <h3>Setting Up a Web Server with Nginx and Gunicorn</h3>
+            <p>For a Python web application, Nginx serves as a reverse proxy, while Gunicorn runs the application:</p>
+            
+            <div class="code-block bash">
+# Create application directory
+sudo mkdir -p /var/www/myapp
+sudo chown deploy:deploy /var/www/myapp
+
+# Clone your repository
+cd /var/www/myapp
+git clone https://github.com/yourusername/your-repo.git .
+
+# Set up virtual environment
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Install Gunicorn
+pip install gunicorn
+            </div>
+            
+            <p>Create a Gunicorn systemd service file for automatic startup and management:</p>
+            
+            <div class="code-block bash">
+sudo nano /etc/systemd/system/gunicorn.service
+            </div>
+            
+            <div class="code-block">
+[Unit]
+Description=Gunicorn daemon for Django application
+After=network.target
+
+[Service]
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/myapp
+ExecStart=/var/www/myapp/venv/bin/gunicorn --workers 3 --bind unix:/var/www/myapp/myapp.sock myproject.wsgi:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+            </div>
+            
+            <div class="code-block bash">
+# Enable and start the service
+sudo systemctl enable gunicorn
+sudo systemctl start gunicorn
+sudo systemctl status gunicorn
+            </div>
+            
+            <p>Configure Nginx to proxy requests to Gunicorn:</p>
+            
+            <div class="code-block bash">
+sudo nano /etc/nginx/sites-available/myapp
+            </div>
+            
+            <div class="code-block nginx">
+server {
+    listen 80;
+    server_name example.com www.example.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        root /var/www/myapp;
+    }
+    
+    location /media/ {
+        root /var/www/myapp;
+    }
+    
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/var/www/myapp/myapp.sock;
+    }
+}
+            </div>
+            
+            <div class="code-block bash">
+# Enable the site configuration
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+sudo nginx -t  # Test configuration
+sudo systemctl restart nginx
+            </div>
+            
+            <h3>Setting Up HTTPS with Let's Encrypt</h3>
+            <p>Secure your site with free SSL certificates from Let's Encrypt:</p>
+            
+            <div class="code-block bash">
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Obtain and install certificates
+sudo certbot --nginx -d example.com -d www.example.com
+
+# Verify auto-renewal
+sudo certbot renew --dry-run
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Certbot automatically updates your Nginx configuration to redirect HTTP to HTTPS and sets up certificate renewal.
+            </div>
+            
+            <h3>Deployment Updates</h3>
+            <p>When you need to update your application, follow these steps:</p>
+            
+            <div class="code-block bash">
+cd /var/www/myapp
+
+# Pull the latest code
+git pull
+
+# Activate the virtual environment
+source venv/bin/activate
+
+# Install any new dependencies
+pip install -r requirements.txt
+
+# Apply database migrations (for Django)
+python manage.py migrate
+
+# Collect static files (for Django)
+python manage.py collectstatic --noinput
+
+# Restart Gunicorn
+sudo systemctl restart gunicorn
+            </div>
+        </section>
+        
+        <section id="docker">
+            <h2>Docker Deployment</h2>
+            
+            <h3>Why Use Docker?</h3>
+            <p>Docker provides several benefits for deployment:</p>
+            <ul>
+                <li>Consistent environments across development and production</li>
+                <li>Isolation of application dependencies</li>
+                <li>Easier scaling and management</li>
+                <li>Simplified CI/CD pipelines</li>
+            </ul>
+            
+            <h3>Dockerizing a Django Application</h3>
+            <p>To containerize a Django application, create a Dockerfile in your project's root directory:</p>
+            
+            <div class="code-block dockerfile">
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
+COPY . .
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Run gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myproject.wsgi:application"]
+            </div>
+            
+            <p>Create a docker-compose.yml file to define your application services:</p>
+            
+            <div class="code-block compose">
+version: '3.8'
+
+services:
+  web:
+    build: .
+    restart: always
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+  
+  nginx:
+    image: nginx:1.21
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+            </div>
+            
+            <p>Create an Nginx configuration file in nginx/conf.d/myapp.conf:</p>
+            
+            <div class="code-block nginx">
+server {
+    listen 80;
+    server_name example.com www.example.com;
+    
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+    
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name example.com www.example.com;
+    
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+    
+    location /static/ {
+        alias /app/staticfiles/;
+    }
+    
+    location /media/ {
+        alias /app/media/;
+    }
+    
+    location / {
+        proxy_pass http://web:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+            </div>
+            
+            <h3>Deploying with Docker</h3>
+            <p>To deploy your Docker-based application:</p>
+            
+            <div class="code-block bash">
+# Install Docker and Docker Compose on your server
+# (Refer to Docker's official documentation for installation)
+
+# Clone your repository
+git clone https://github.com/yourusername/your-repo.git
+cd your-repo
+
+# Create environment files (DO NOT commit these to version control)
+nano .env.prod
+nano .env.prod.db
+
+# Build and start containers
+docker-compose -f docker-compose.yml up -d --build
+
+# Run migrations
+docker-compose exec web python manage.py migrate
+
+# Create a superuser
+docker-compose exec web python manage.py createsuperuser
+            </div>
+            
+            <h3>Setting Up SSL with Docker and Let's Encrypt</h3>
+            <p>To add SSL to your Docker deployment, you can use Certbot with Docker:</p>
+            
+            <div class="code-block bash">
+# Initialize certbot
+docker-compose run --rm --entrypoint "\
+  certbot certonly --webroot \
+  --webroot-path=/var/www/certbot \
+  --email your-email@example.com \
+  --agree-tos \
+  --no-eff-email \
+  -d example.com -d www.example.com" certbot
+
+# Reload Nginx
+docker-compose exec nginx nginx -s reload
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> For more complex setups, consider using a Docker image like <code>nginxproxy/nginx-proxy</code> with <code>acme-companion</code> for automatic SSL handling.
+            </div>
+            
+            <h3>Updating a Docker Deployment</h3>
+            <p>When you need to update your application:</p>
+            
+            <div class="code-block bash">
+# Pull the latest code
+git pull
+
+# Rebuild and restart containers
+docker-compose down
+docker-compose up -d --build
+
+# Apply migrations if needed
+docker-compose exec web python manage.py migrate
+            </div>
+        </section>
+        
+        <section id="cloud">
+            <h2>Cloud Platform Deployment</h2>
+            
+            <h3>Platform as a Service (PaaS)</h3>
+            <p>PaaS providers manage the infrastructure, letting you focus on your application code. Popular options include:</p>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Heroku</h3>
+                    <p>One of the simplest platforms for deploying web applications with support for many languages.</p>
+                    <p><strong>Best for:</strong> Startups, MVPs, small to medium applications</p>
+                </div>
+                <div class="card">
+                    <h3>Railway</h3>
+                    <p>A modern platform with simple pricing and infrastructure-as-code options.</p>
+                    <p><strong>Best for:</strong> Full-stack applications, quick deployments</p>
+                </div>
+                <div class="card">
+                    <h3>Render</h3>
+                    <p>A unified platform for deploying static sites, web services, and databases with free tiers.</p>
+                    <p><strong>Best for:</strong> Full-stack applications, small startups</p>
+                </div>
+            </div>
+            
+            <h3>Deploying to Heroku</h3>
+            <p>Heroku is a popular choice for deploying Django applications:</p>
+            
+            <h4>1. Prepare Your Application</h4>
+            <p>Create the necessary files for Heroku:</p>
+            
+            <div class="code-block">
+# Procfile
+web: gunicorn myproject.wsgi --log-file -
+            </div>
+            
+            <div class="code-block">
+# runtime.txt
+python-3.9.13
+            </div>
+            
+            <p>Make sure your requirements.txt includes gunicorn:</p>
+            
+            <div class="code-block">
+# requirements.txt
+Django==4.2.0
+gunicorn==20.1.0
+django-environ==0.9.0
+psycopg2-binary==2.9.3
+# other dependencies...
+            </div>
+            
+            <h4>2. Configure Django Settings</h4>
+            <p>Update your settings.py to work with Heroku:</p>
+            
+            <div class="code-block python">
+import os
+import environ
+import dj_database_url
+
+env = environ.Env()
+
+# Read environment variables from .env if available
+environ.Env.read_env()
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env.bool('DEBUG', default=False)
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
+
+# Add support for Heroku PostgreSQL
+DATABASES = {
+    'default': dj_database_url.config(
+        default=env('DATABASE_URL', default='sqlite:///db.sqlite3'),
+        conn_max_age=600
+    )
+}
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Configure Django to use whitenoise for static files serving
+MIDDLEWARE = [
+    # ...
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # ...
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+            </div>
+            
+            <h4>3. Deploy to Heroku</h4>
+            <div class="code-block bash">
+# Install the Heroku CLI
+# (Follow Heroku's instructions for your OS)
+
+# Login to Heroku
+heroku login
+
+# Create a new Heroku app
+heroku create my-app-name
+
+# Add a PostgreSQL database
+heroku addons:create heroku-postgresql:hobby-dev
+
+# Configure environment variables
+heroku config:set SECRET_KEY="your-secret-key"
+heroku config:set DEBUG=False
+heroku config:set ALLOWED_HOSTS=my-app-name.herokuapp.com
+
+# Deploy to Heroku
+git push heroku main
+
+# Run migrations
+heroku run python manage.py migrate
+
+# Create a superuser
+heroku run python manage.py createsuperuser
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> You can connect Heroku to your GitHub repository for automatic deployments when you push to your main branch.
+            </div>
+            
+            <h3>Deploying to Railway</h3>
+            <p>Railway offers a simple deployment process with automatic builds from GitHub:</p>
+            
+            <ol>
+                <li>Create an account at railway.app</li>
+                <li>Connect your GitHub repository</li>
+                <li>Create a new project and select your repository</li>
+                <li>Add a PostgreSQL database service</li>
+                <li>Configure environment variables similar to the Heroku example</li>
+                <li>Railway will automatically build and deploy your application</li>
+                <li>Use the Railway CLI for running migrations and creating superusers</li>
+            </ol>
+        </section>
+        
+        <section id="serverless">
+            <h2>Serverless Deployment</h2>
+            
+            <h3>What is Serverless?</h3>
+            <p>Serverless computing allows you to run applications without managing the underlying infrastructure. The platform automatically scales based on demand and you only pay for what you use.</p>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>AWS Lambda</h3>
+                    <p>Amazon's function-as-a-service (FaaS) offering with extensive integrations in the AWS ecosystem.</p>
+                </div>
+                <div class="card">
+                    <h3>Google Cloud Functions</h3>
+                    <p>Google's serverless compute solution for event-driven applications.</p>
+                </div>
+                <div class="card">
+                    <h3>Azure Functions</h3>
+                    <p>Microsoft's serverless solution with support for multiple languages and triggers.</p>
+                </div>
+            </div>
+            
+            <h3>Serverless Django with Zappa</h3>
+            <p>Zappa makes it easy to deploy Django applications to AWS Lambda:</p>
+            
+            <div class="code-block bash">
+# Install Zappa
+pip install zappa
+
+# Initialize Zappa configuration
+zappa init
+            </div>
+            
+            <p>This creates a zappa_settings.json file that you can customize:</p>
+            
+            <div class="code-block">
+{
+    "production": {
+        "aws_region": "us-east-1",
+        "django_settings": "myproject.settings",
+        "profile_name": "default",
+        "project_name": "my-django-app",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-my-django-app",
+        "timeout_seconds": 30,
+        "memory_size": 512,
+        "manage_roles": false,
+        "role_name": "ZappaLambdaExecution",
+        "vpc_config": {
+            "SubnetIds": [ "subnet-12345abc" ],
+            "SecurityGroupIds": [ "sg-12345abc" ]
+        }
+    }
+}
+            </div>
+            
+            <div class="code-block bash">
+# Deploy your application
+zappa deploy production
+
+# Update an existing deployment
+zappa update production
+
+# Apply migrations
+zappa manage production migrate
+            </div>
+            
+            <div class="warning">
+                <strong>Note:</strong> Serverless Django works best for lightweight applications. Heavy applications with long-running processes may not be ideal for serverless environments.
+            </div>
+            
+            <h3>Static Frontends with Serverless Backends</h3>
+            <p>For modern web applications, a common pattern is:</p>
+            <ol>
+                <li>Static frontend (React, Vue, etc.) hosted on services like Netlify, Vercel, or AWS S3 + CloudFront</li>
+                <li>Serverless backend API using AWS Lambda, API Gateway, etc.</li>
+                <li>Database service like RDS, DynamoDB, or managed MongoDB</li>
+            </ol>
+            
+            <p>This approach can be cost-effective and highly scalable while keeping deployment complexity manageable.</p>
+        </section>
+        
+        <section id="best-practices">
+            <h2>Deployment Best Practices</h2>
+            
+            <h3>Continuous Integration/Continuous Deployment (CI/CD)</h3>
+            <p>Automating your deployment process with CI/CD offers several benefits:</p>
+            <ul>
+                <li>Faster, more reliable releases</li>
+                <li>Automated testing before deployment</li>
+                <li>Consistent deployment processes</li>
+                <li>Easy rollbacks when issues occur</li>
+            </ul>
+            
+            <p>Popular CI/CD tools include:</p>
+            <ul>
+                <li>GitHub Actions</li>
+                <li>GitLab CI/CD</li>
+                <li>Jenkins</li>
+                <li>CircleCI</li>
+                <li>Travis CI</li>
+            </ul>
+            
+            <h3>Monitoring and Logging</h3>
+            <p>Once your application is deployed, you need to monitor its health and performance:</p>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Application Monitoring</h3>
+                    <p>Tools like New Relic, Datadog, or Sentry provide insights into application performance and errors.</p>
+                </div>
+                <div class="card">
+                    <h3>Server Monitoring</h3>
+                    <p>Monitor server resources using tools like Prometheus, Grafana, or cloud provider dashboards.</p>
+                </div>
+                <div class="card">
+                    <h3>Log Management</h3>
+                    <p>Centralize logs with services like ELK Stack (Elasticsearch, Logstash, Kibana), Graylog, or cloud logging solutions.</p>
+                </div>
+            </div>
+            
+            <h3>Security Considerations</h3>
+            <p>Always prioritize security in your deployments:</p>
+            <ul>
+                <li>Use HTTPS everywhere</li>
+                <li>Keep all software updated (OS, web server, application dependencies)</li>
+                <li>Implement proper authentication and authorization</li>
+                <li>Use Web Application Firewalls (WAF) for additional protection</li>
+                <li>Regularly backup your data</li>
+                <li>Follow the principle of least privilege for all accounts and services</li>
+                <li>Scan your code for vulnerabilities using tools like OWASP ZAP, Snyk, or SonarQube</li>
+            </ul>
+            
+            <h3>Scaling Strategies</h3>
+            <p>As your application grows, consider these scaling approaches:</p>
+            <ul>
+                <li><strong>Vertical Scaling</strong>: Adding more resources (CPU, RAM) to existing servers</li>
+                <li><strong>Horizontal Scaling</strong>: Adding more server instances behind a load balancer</li>
+                <li><strong>Database Scaling</strong>: Read replicas, sharding, or switching to a distributed database</li>
+                <li><strong>Caching</strong>: Implementing Redis or Memcached to reduce database load</li>
+                <li><strong>CDN</strong>: Using Content Delivery Networks to distribute static content globally</li>
+                <li><strong>Microservices</strong>: Breaking monolithic applications into smaller, independently deployable services</li>
+            </ul>
+        </section>
+        
+        <section id="conclusion">
+            <h2>Deployment Checklist</h2>
+            
+            <div class="checklist">
+                <h4>Pre-Deployment Checklist</h4>
+                <ul>
+                    <li>Application is thoroughly tested</li>
+                    <li>DEBUG is set to False</li>
+                    <li>Secret keys and credentials are stored securely</li>
+                    <li>Static files are configured correctly</li>
+                    <li>Database migrations are prepared</li>
+                    <li>Requirements file is up to date</li>
+                </ul>
+            </div>
+            
+            <div class="checklist">
+                <h4>Post-Deployment Checklist</h4>
+                <ul>
+                    <li>Application is accessible at the correct URL</li>
+                    <li>HTTPS is working correctly</li>
+                    <li>Static files are being served properly</li>
+                    <li>Application features work as expected</li>
+                    <li>Error logging is capturing issues</li>
+                    <li>Backups are configured and tested</li>
+                    <li>Monitoring alerts are set up</li>
+                </ul>
+            </div>
+            
+            <p>Remember that deployment is not a one-time task but an ongoing process. Continuous improvement of your deployment process leads to more reliable applications and less stressful releases.</p>
+        </section>
+        
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Django Deployment Checklist</h3>
+                    <p>Official Django documentation on deployment best practices.</p>
+                    <a href="https://docs.djangoproject.com/en/stable/howto/deployment/checklist/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>DigitalOcean Tutorials</h3>
+                    <p>Detailed guides for deploying various web applications.</p>
+                    <a href="https://www.digitalocean.com/community/tutorials" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>Docker Documentation</h3>
+                    <p>Official resources for learning Docker deployment.</p>
+                    <a href="https://docs.docker.com/" class="btn">Visit</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Web Deployment Guide. Made with ❤️ for the developer community.</p>
+        </div>
+    </footer>
+    
+    <div class="progress-container">
+        <div>Reading Progress</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Track reading progress
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progress').style.width = scrollPercent + '%';
+        });
+    </script>
+    
+    <!-- HTML Escaping Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all code blocks that have the 'html' class
+            const htmlCodeBlocks = document.querySelectorAll('.code-block.html');
+            
+            // Process each HTML code block
+            htmlCodeBlocks.forEach(function(block) {
+                // Get the original content
+                const originalContent = block.innerHTML;
+                
+                // Escape HTML tags
+                const escapedContent = originalContent
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Set the escaped content back
+                block.innerHTML = escapedContent;
+            });
+        });
+    </script>
+</body>
+</html>
