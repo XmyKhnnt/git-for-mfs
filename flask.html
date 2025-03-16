@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Python Framework | learn.withkhent.com</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --secondary: #24292e;
+            --bg-light: #f6f8fa;
+            --text: #24292e;
+            --code-bg: #f1f1f1;
+            --border: #e1e4e8;
+            --flask: #000000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: white;
+        }
+        
+        header {
+            background-color: var(--flask);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background-color: var(--bg-light);
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--flask);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #586069;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--flask);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #333333;
+        }
+        
+        main {
+            padding: 4rem 0;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--flask);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--flask);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1.5rem;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            position: relative;
+            white-space: pre;
+        }
+        
+        .code-block::before {
+            content: "Code";
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            background-color: var(--flask);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .code-block.python::before {
+            content: "Python";
+        }
+        
+        .code-block.bash::before {
+            content: "Terminal";
+        }
+        
+        .code-block.html::before {
+            content: "HTML";
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--flask);
+        }
+        
+        footer {
+            background-color: var(--flask);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .progress-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 99;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            width: 200px;
+            background-color: var(--bg-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--flask);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .progress-container {
+                display: none;
+            }
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin: 1rem 0 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #856404;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .flask-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .flask-flow-item {
+            background-color: var(--flask);
+            color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            width: 200px;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .flask-flow-item::after {
+            content: "↓";
+            display: block;
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--flask);
+        }
+        
+        .flask-flow-item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="logo">
+                        <span>Flask Framework</span>
+                        <span class="" style="font-size: 10px;">learn.withkhent.com</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="#getting-started">Getting Started</a>
+                    <a href="#routing">Routing</a>
+                    <a href="#templates">Templates</a>
+                    <a href="#forms">Forms</a>
+                    <a href="#database">Database</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>Flask Python Framework</h1>
+            <p>Learn how to build lightweight and powerful web applications with Python's most popular micro-framework</p>
+            <a href="#get-started" class="btn">Get Started</a>
+        </div>
+    </div>
+    
+    <main class="container">
+        <section id="get-started">
+            <h2>Why Flask?</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">🪶</div>
+                    <h3>Lightweight</h3>
+                    <p>Flask is a micro-framework that provides the essentials without imposing a specific structure or dependencies.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <h3>Easy to Learn</h3>
+                    <p>With its simple and intuitive API, Flask is perfect for beginners and experienced developers alike.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧩</div>
+                    <h3>Extensible</h3>
+                    <p>Start small and add only what you need with Flask's extensive ecosystem of extensions.</p>
+                </div>
+            </div>
+            
+            <h3>Flask Overview</h3>
+            <p>Flask is a Python micro-framework for web development. Unlike comprehensive frameworks like Django, Flask provides the bare essentials with the flexibility to choose your components and structure your application as you see fit.</p>
+            
+            <div class="flask-flow">
+                <div class="flask-flow-item">Route Matching</div>
+                <div class="flask-flow-item">View Function</div>
+                <div class="flask-flow-item">Template Rendering</div>
+                <div class="flask-flow-item">Response</div>
+            </div>
+            
+            <p>When a request comes to a Flask application:</p>
+            <ol>
+                <li>Flask matches the URL to a registered <strong>route</strong></li>
+                <li>The corresponding <strong>view function</strong> is executed</li>
+                <li>The view function processes data and may render a <strong>template</strong></li>
+                <li>A <strong>response</strong> is returned to the client</li>
+            </ol>
+        </section>
+        
+        <section id="getting-started">
+            <h2>Getting Started with Flask</h2>
+            
+            <h3>Prerequisites</h3>
+            <p>Before you start, make sure you have:</p>
+            <ul>
+                <li>Python 3.6 or newer installed</li>
+                <li>Basic knowledge of Python programming</li>
+                <li>Understanding of basic web concepts (HTTP, HTML)</li>
+                <li>A text editor or IDE (VS Code, PyCharm, etc.)</li>
+            </ul>
+            
+            <h3>Installation</h3>
+            <p>The recommended way to install Flask is using pip, the Python package manager, within a virtual environment:</p>
+            
+            <div class="code-block bash">
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install Flask
+pip install flask
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Always use a virtual environment for your Flask projects. This isolates dependencies for each project, preventing conflicts between different projects.
+            </div>
+            
+            <h3>Your First Flask Application</h3>
+            <p>Let's create a simple "Hello, World!" application:</p>
+            
+            <div class="code-block python">
+# app.py
+from flask import Flask
+
+# Create a Flask application instance
+app = Flask(__name__)
+
+# Define a route and view function
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+# Run the application if this file is executed directly
+if __name__ == '__main__':
+    app.run(debug=True)
+            </div>
+            
+            <p>Save this code in a file named <code>app.py</code> and run it:</p>
+            
+            <div class="code-block bash">
+python app.py
+            </div>
+            
+            <p>You should now be able to visit <code>http://127.0.0.1:5000/</code> in your browser and see "Hello, World!"</p>
+            
+            <h3>Understanding the Code</h3>
+            <ul>
+                <li><code>Flask(__name__)</code> creates a Flask application instance. The <code>__name__</code> parameter helps Flask locate resources.</li>
+                <li><code>@app.route('/')</code> is a decorator that tells Flask which URL should trigger our function.</li>
+                <li><code>hello_world()</code> is a view function that returns content to be displayed in the browser.</li>
+                <li><code>app.run(debug=True)</code> starts the development server with debug mode enabled.</li>
+            </ul>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Debug mode enables auto-reload when code changes and provides helpful error pages. Always disable debug mode in production.
+            </div>
+        </section>
+        
+        <section id="routing">
+            <h2>Routing and URL Handling</h2>
+            
+            <h3>Basic Routing</h3>
+            <p>Routes in Flask are defined using the <code>@app.route</code> decorator:</p>
+            
+            <div class="code-block python">
+@app.route('/')
+def index():
+    return 'Home Page'
+
+@app.route('/about')
+def about():
+    return 'About Page'
+            </div>
+            
+            <h3>Dynamic Routes</h3>
+            <p>You can capture parts of the URL as variables:</p>
+            
+            <div class="code-block python">
+@app.route('/user/<username>')
+def show_user_profile(username):
+    return f'User: {username}'
+
+@app.route('/post/<int:post_id>')
+def show_post(post_id):
+    return f'Post: {post_id}'
+            </div>
+            
+            <p>Flask supports these converter types:</p>
+            <ul>
+                <li><code>string</code> (default): accepts any text without a slash</li>
+                <li><code>int</code>: accepts positive integers</li>
+                <li><code>float</code>: accepts positive floating point values</li>
+                <li><code>path</code>: like string but also accepts slashes</li>
+                <li><code>uuid</code>: accepts UUID strings</li>
+            </ul>
+            
+            <h3>HTTP Methods</h3>
+            <p>By default, routes only respond to GET requests. You can specify which HTTP methods are allowed:</p>
+            
+            <div class="code-block python">
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Process the login form
+        return process_login_form()
+    else:
+        # Show the login form
+        return show_login_form()
+            </div>
+            
+            <h3>URL Building</h3>
+            <p>Flask provides a <code>url_for()</code> function to build URLs for specific functions:</p>
+            
+            <div class="code-block python">
+from flask import url_for
+
+@app.route('/')
+def index():
+    # Generate URL for the show_user_profile function
+    url = url_for('show_user_profile', username='john')
+    return f'User profile URL: {url}'
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Always use <code>url_for()</code> to generate URLs instead of hardcoding them. This makes your application more maintainable.
+            </div>
+            
+            <h3>Redirects and Errors</h3>
+            <p>Flask provides functions for redirecting and displaying error pages:</p>
+            
+            <div class="code-block python">
+from flask import redirect, url_for, abort
+
+@app.route('/redirect-example')
+def redirect_example():
+    # Redirect to the index page
+    return redirect(url_for('index'))
+
+@app.route('/private')
+def private():
+    # Return a 403 Forbidden error
+    abort(403)
+            </div>
+        </section>
+        
+        <section id="templates">
+            <h2>Templates with Jinja2</h2>
+            
+            <h3>Template Basics</h3>
+            <p>Flask uses Jinja2 as its template engine. Templates are HTML files with Jinja2 syntax for dynamic content. By convention, templates are stored in a <code>templates</code> folder:</p>
+            
+            <div class="code-block">
+myapp/
+  |- app.py
+  |- templates/
+      |- index.html
+      |- about.html
+            </div>
+            
+            <p>Rendering templates in Flask:</p>
+            
+            <div class="code-block python">
+from flask import render_template
+
+@app.route('/')
+def index():
+    return render_template('index.html', title='Home Page')
+            </div>
+            
+            <h3>Jinja2 Syntax</h3>
+            <p>Jinja2 provides several types of delimiters:</p>
+            <ul>
+                <li><code>{{ ... }}</code> for expressions to print to the template output</li>
+                <li><code>{% ... %}</code> for statements like loops or assignments</li>
+                <li><code>{# ... #}</code> for comments</li>
+            </ul>
+            
+            <p>A simple Jinja2 template (<code>index.html</code>):</p>
+            
+            <div class="code-block html">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>Welcome to {{ title }}</h1>
+    
+    {% if user %}
+        <p>Hello, {{ user.username }}!</p>
+    {% else %}
+        <p>Hello, Guest!</p>
+    {% endif %}
+    
+    <h2>Posts</h2>
+    <ul>
+    {% for post in posts %}
+        <li>{{ post.title }} - {{ post.author }}</li>
+    {% else %}
+        <li>No posts available.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+            </div>
+            
+            <p>Using this template in a view function:</p>
+            
+            <div class="code-block python">
+@app.route('/')
+def index():
+    user = {'username': 'John'}
+    posts = [
+        {'title': 'First Post', 'author': 'John'},
+        {'title': 'Second Post', 'author': 'Jane'}
+    ]
+    return render_template('index.html', title='Home', user=user, posts=posts)
+            </div>
+            
+            <h3>Template Inheritance</h3>
+            <p>Jinja2 supports template inheritance, which allows you to build a base template and extend it in child templates:</p>
+            
+            <p>Base template (<code>base.html</code>):</p>
+            
+            <div class="code-block html">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - My Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+    </nav>
+    
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        &copy; 2025 My Website
+    </footer>
+</body>
+</html>
+            </div>
+            
+            <p>Child template (<code>index.html</code>):</p>
+            
+            <div class="code-block html">
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Welcome to My Website</h1>
+    <p>This is the home page.</p>
+{% endblock %}
+            </div>
+            
+            <h3>Static Files</h3>
+            <p>Flask looks for static files (CSS, JavaScript, images) in a <code>static</code> folder:</p>
+            
+            <div class="code-block">
+myapp/
+  |- app.py
+  |- static/
+      |- style.css
+      |- script.js
+      |- images/
+          |- logo.png
+  |- templates/
+      |- base.html
+      |- index.html
+            </div>
+            
+            <p>Referencing static files in templates:</p>
+            
+            <div class="code-block html">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </div>
+        </section>
+        
+        <section id="forms">
+            <h2>Handling Forms</h2>
+            
+            <h3>Basic Form Handling</h3>
+            <p>Flask provides access to form data through the <code>request</code> object:</p>
+            
+            <div class="code-block python">
+from flask import request
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Process login (omitted)
+        return f'Logged in as {username}'
+    
+    # If GET request, show the login form
+    return '''
+        <form method="post">
+            <p><input type="text" name="username" placeholder="Username"></p>
+            <p><input type="password" name="password" placeholder="Password"></p>
+            <p><input type="submit" value="Login"></p>
+        </form>
+    '''
+            </div>
+            
+            <h3>Flask-WTF for Forms</h3>
+            <p>Flask-WTF is an extension that integrates WTForms with Flask, providing more structured form handling with validation:</p>
+            
+            <div class="code-block bash">
+pip install flask-wtf
+            </div>
+            
+            <p>Defining a form class:</p>
+            
+            <div class="code-block python">
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Email, Length
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    submit = SubmitField('Log In')
+            </div>
+            
+            <p>Using the form in a view function:</p>
+            
+            <div class="code-block python">
+from flask import render_template, flash, redirect, url_for
+
+app.config['SECRET_KEY'] = 'your-secret-key'  # Required for CSRF protection
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        # Form was submitted and is valid
+        username = form.username.data
+        password = form.password.data
+        # Process login (omitted)
+        flash(f'Login requested for user {username}')
+        return redirect(url_for('index'))
+    
+    # Either GET request or invalid form submission
+    return render_template('login.html', form=form)
+            </div>
+            
+            <p>Template for rendering the form (<code>login.html</code>):</p>
+            
+            <div class="code-block html">
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Login</h1>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label }}
+            {{ form.username() }}
+            {% if form.username.errors %}
+                <ul class="errors">
+                    {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password() }}
+            {% if form.password.errors %}
+                <ul class="errors">
+                    {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}
+            </div>
+            
+            <div class="tip">
+                <strong>Tip:</strong> Always include <code>{{ form.hidden_tag() }}</code> in your form template. This generates a hidden field with a CSRF token for security.
+            </div>
+        </section>
+        
+        <section id="database">
+            <h2>Database Integration</h2>
+            
+            <h3>Flask-SQLAlchemy</h3>
+            <p>Flask-SQLAlchemy is an extension that adds SQLAlchemy support to Flask, making it easier to work with databases:</p>
+            
+            <div class="code-block bash">
+pip install flask-sqlalchemy
+            </div>
+            
+            <p>Setting up SQLAlchemy:</p>
+            
+            <div class="code-block python">
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+            </div>
+            
+            <h3>Defining Models</h3>
+            <p>Models are Python classes that represent database tables:</p>
+            
+            <div class="code-block python">
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    posts = db.relationship('Post', backref='author', lazy=True)
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    def __repr__(self):
+        return f'<Post {self.title}>'
+            </div>
+            
+            <h3>Creating the Database</h3>
+            <p>Create the database tables based on your models:</p>
+            
+            <div class="code-block python">
+# Create tables
+db.create_all()
+            </div>
+            
+            <h3>Basic CRUD Operations</h3>
+            <p>Performing Create, Read, Update, Delete operations with SQLAlchemy:</p>
+            
+            <div class="code-block python">
+# Create
+user = User(username='john', email='john@example.com')
+db.session.add(user)
+db.session.commit()
+
+# Read
+all_users = User.query.all()
+user = User.query.filter_by(username='john').first()
+user_by_id = User.query.get(1)
+
+# Update
+user = User.query.get(1)
+user.username = 'john_updated'
+db.session.commit()
+
+# Delete
+user = User.query.get(1)
+db.session.delete(user)
+db.session.commit()
+            </div>
+            
+            <h3>Using Models in Views</h3>
+            <p>Integrating database models with Flask views:</p>
+            
+            <div class="code-block python">
+@app.route('/users')
+def list_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+@app.route('/user/<int:user_id>')
+def user_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('user_detail.html', user=user)
+
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        
+        user = User(username=username, email=email)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('User created successfully!')
+        return redirect(url_for('list_users'))
+    
+    return render_template('create_user.html')
+            </div>
+            
+            <h3>Migrations with Flask-Migrate</h3>
+            <p>As your application evolves, you'll need to modify your database schema. Flask-Migrate (based on Alembic) helps manage database migrations:</p>
+            
+            <div class="code-block bash">
+pip install flask-migrate
+            </div>
+            
+            <p>Setting up Flask-Migrate:</p>
+            
+            <div class="code-block python">
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# Define models here
+            </div>
+            
+            <p>Using Flask-Migrate from the command line:</p>
+            
+            <div class="code-block bash">
+# Initialize migrations
+flask db init
+
+# Create a migration after model changes
+flask db migrate -m "Add user table"
+
+# Apply migrations to the database
+flask db upgrade
+
+# Rollback migrations if needed
+flask db downgrade
+            </div>
+        </section>
+        
+        <section id="blueprint">
+            <h2>Structuring Large Applications with Blueprints</h2>
+            
+            <h3>What are Blueprints?</h3>
+            <p>Blueprints are a way to organize your Flask application into modular components. They help you split your application into smaller, reusable parts that can be registered with the main application.</p>
+            
+            <h3>Creating a Blueprint</h3>
+            <p>Let's create a blueprint for user-related routes:</p>
+            
+            <div class="code-block python">
+# users/routes.py
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from myapp.models import User
+from myapp.extensions import db
+
+users_bp = Blueprint('users', __name__, url_prefix='/users')
+
+@users_bp.route('/')
+def list_users():
+    users = User.query.all()
+    return render_template('users/list.html', users=users)
+
+@users_bp.route('/<int:user_id>')
+def user_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('users/detail.html', user=user)
+
+@users_bp.route('/create', methods=['GET', 'POST'])
+def create_user():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        
+        user = User(username=username, email=email)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('User created successfully!')
+        return redirect(url_for('users.list_users'))
+    
+    return render_template('users/create.html')
+            </div>
+            
+            <h3>Registering Blueprints</h3>
+            <p>In your application factory or main file:</p>
+            
+            <div class="code-block python">
+# app.py or __init__.py
+from flask import Flask
+from myapp.users.routes import users_bp
+from myapp.posts.routes import posts_bp
+from myapp.extensions import db
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config.Config')
+    
+    # Initialize extensions
+    db.init_app(app)
+    
+    # Register blueprints
+    app.register_blueprint(users_bp)
+    app.register_blueprint(posts_bp)
+    
+    return app
+            </div>
+            
+            <h3>Recommended Project Structure</h3>
+            <p>For larger Flask applications, a modular structure using blueprints is recommended:</p>
+            
+            <div class="code-block">
+myapp/
+  |- __init__.py          # Application factory
+  |- extensions.py        # Flask extensions instances
+  |- models.py            # Database models
+  |- config.py            # Configuration
+  |- users/
+      |- __init__.py
+      |- routes.py        # User blueprint
+      |- forms.py         # User-related forms
+  |- posts/
+      |- __init__.py
+      |- routes.py        # Post blueprint
+      |- forms.py         # Post-related forms
+  |- auth/
+      |- __init__.py
+      |- routes.py        # Authentication blueprint
+      |- forms.py         # Authentication forms
+  |- templates/
+      |- base.html        # Base template
+      |- users/           # User templates
+      |- posts/           # Post templates
+      |- auth/            # Auth templates
+  |- static/
+      |- css/
+      |- js/
+      |- images/
+  |- tests/               # Unit tests
+  |- run.py               # Application entry point
+            </div>
+        </section>
+        
+        <section id="deployment">
+            <h2>Deployment</h2>
+            
+            <h3>Preparing for Production</h3>
+            <p>Before deploying a Flask application, make sure to:</p>
+            <ul>
+                <li>Disable debug mode: <code>app.run(debug=False)</code></li>
+                <li>Use a production WSGI server (Gunicorn, uWSGI, etc.)</li>
+                <li>Set up proper error logging</li>
+                <li>Use environment variables for configuration</li>
+                <li>Enable HTTPS</li>
+            </ul>
+            
+            <h3>Deployment Options</h3>
+            
+            <h4>1. Traditional Server with Gunicorn and Nginx</h4>
+            <div class="code-block bash">
+# Install Gunicorn
+pip install gunicorn
+
+# Run with Gunicorn
+gunicorn -w 4 -b 127.0.0.1:5000 "myapp:create_app()"
+            </div>
+            
+            <p>Configure Nginx as a reverse proxy:</p>
+            
+            <div class="code-block">
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+            </div>
+            
+            <h4>2. Docker Deployment</h4>
+            <p>Create a Dockerfile:</p>
+            
+            <div class="code-block">
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "myapp:create_app()"]
+            </div>
+            
+            <h4>3. Platform as a Service (PaaS)</h4>
+            <p>For simpler deployments, consider using services like:</p>
+            <ul>
+                <li>Heroku</li>
+                <li>Railway</li>
+                <li>Render</li>
+                <li>DigitalOcean App Platform</li>
+                <li>Google Cloud Run</li>
+            </ul>
+        </section>
+        
+        <section id="extensions">
+            <h2>Popular Flask Extensions</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Flask-Login</h3>
+                    <p>User session management for Flask, providing user authentication and "remember me" functionality.</p>
+                    <code>pip install flask-login</code>
+                </div>
+                
+                <div class="card">
+                    <h3>Flask-RESTful</h3>
+                    <p>Extension for quickly building REST APIs in Flask.</p>
+                    <code>pip install flask-restful</code>
+                </div>
+                
+                <div class="card">
+                    <h3>Flask-Admin</h3>
+                    <p>Ready-to-use admin interface for Flask that can integrate with SQLAlchemy, MongoDB, and more.</p>
+                    <code>pip install flask-admin</code>
+                </div>
+                
+                <div class="card">
+                    <h3>Flask-Mail</h3>
+                    <p>Makes sending emails from Flask applications simple.</p>
+                    <code>pip install flask-mail</code>
+                </div>
+                
+                <div class="card">
+                    <h3>Flask-Caching</h3>
+                    <p>Adds caching support to your Flask application.</p>
+                    <code>pip install flask-caching</code>
+                </div>
+                
+                <div class="card">
+                    <h3>Flask-JWT-Extended</h3>
+                    <p>JWT authentication support for Flask applications.</p>
+                    <code>pip install flask-jwt-extended</code>
+                </div>
+            </div>
+        </section>
+        
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            
+            <div class="card-container">
+                <div class="card">
+                    <h3>Official Flask Documentation</h3>
+                    <p>Comprehensive and well-organized documentation for Flask.</p>
+                    <a href="https://flask.palletsprojects.com/" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>Flask Mega-Tutorial</h3>
+                    <p>An in-depth tutorial by Miguel Grinberg covering all aspects of Flask.</p>
+                    <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" class="btn">Visit</a>
+                </div>
+                <div class="card">
+                    <h3>Flask Web Development</h3>
+                    <p>Book by Miguel Grinberg on building web applications with Flask.</p>
+                    <a href="https://www.oreilly.com/library/view/flask-web-development/9781491991725/" class="btn">Visit</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Flask Fundamentals. Made with ❤️ for the developer community.</p>
+        </div>
+    </footer>
+    
+    <div class="progress-container">
+        <div>Reading Progress</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Track reading progress
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('progress').style.width = scrollPercent + '%';
+        });
+    </script>
+    
+    <!-- HTML Escaping Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all code blocks that have the 'html' class
+            const htmlCodeBlocks = document.querySelectorAll('.code-block.html');
+            
+            // Process each HTML code block
+            htmlCodeBlocks.forEach(function(block) {
+                // Get the original content
+                const originalContent = block.innerHTML;
+                
+                // Escape HTML tags
+                const escapedContent = originalContent
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Set the escaped content back
+                block.innerHTML = escapedContent;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -5,16 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Development Tutorials | learn.withkhent.com</title>
     <style>
+        /* Remove the keyframe animation for the hero button altogether */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
+        
         :root {
             --primary: #2ea44f;
             --secondary: #24292e;
             --django: #092e20;
             --deploy: #0366d6;
             --web: #e34c26;
+            --flask: #009688;
+            --fastapi: #000000;
             --bg-light: #f6f8fa;
             --text: #24292e;
             --code-bg: #f1f1f1;
             --border: #e1e4e8;
+            --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            --animation-duration: 0.3s;
+            --animation-timing: ease-out;
         }
         
         * {
@@ -58,6 +96,17 @@
             gap: 0.5rem;
             font-weight: bold;
             font-size: 1.5rem;
+            position: relative;
+        }
+        
+        .logo span:first-child {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .logo span:last-child {
+            animation: fadeIn 0.8s 0.2s ease forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
         }
         
         .nav-links {
@@ -69,10 +118,27 @@
             color: white;
             text-decoration: none;
             transition: opacity 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
         }
         
         .nav-links a:hover {
             opacity: 0.8;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
         }
         
         .hero {
@@ -84,6 +150,8 @@
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
+            color: var(--text);
+            animation: slideInUp 0.8s var(--animation-timing);
         }
         
         .hero p {
@@ -91,6 +159,31 @@
             max-width: 700px;
             margin: 0 auto 2rem;
             color: #586069;
+            animation: slideInUp 0.8s 0.2s var(--animation-timing);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        
+        /* Hero button specific styles */
+        .hero .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.8s 0.4s var(--animation-timing);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        
+        .hero .btn:hover {
+            background-color: #2c974b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .btn {
@@ -101,11 +194,20 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
         .btn:hover {
             background-color: #2c974b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Custom button pulse animation for non-hero buttons */
+        .card-footer .btn:hover,
+        .resources-card .btn:hover {
+            animation: pulse 1s infinite;
         }
         
         main {
@@ -155,11 +257,24 @@
             margin-bottom: 2rem;
         }
         
+        .card-container .card {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .card-container .card:nth-child(1) { animation: slideInUp 0.6s 0.1s forwards; }
+        .card-container .card:nth-child(2) { animation: slideInUp 0.6s 0.2s forwards; }
+        .card-container .card:nth-child(3) { animation: slideInUp 0.6s 0.3s forwards; }
+        .card-container .card:nth-child(4) { animation: slideInUp 0.6s 0.4s forwards; }
+        .card-container .card:nth-child(5) { animation: slideInUp 0.6s 0.5s forwards; }
+        .card-container .card:nth-child(6) { animation: slideInUp 0.6s 0.6s forwards; }
+        
         .card {
             background-color: white;
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
             transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
@@ -170,14 +285,15 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
-        .card h3 {
-            margin-top: 0;
-        }
-        
         .card-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover .card-icon {
+            animation: bounce 1s infinite;
         }
         
         .card.git .card-icon {
@@ -196,7 +312,16 @@
             color: var(--deploy);
         }
         
+        .card.flask .card-icon {
+            color: var(--flask);
+        }
+        
+        .card.fastapi .card-icon {
+            color: var(--fastapi);
+        }
+        
         .card-content {
+            padding: 1.5rem;
             flex-grow: 1;
         }
         
@@ -213,13 +338,61 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-tag:hover {
+            background-color: #e1e4e8;
+            transform: translateY(-2px);
+        }
+        
+        .topic-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease-out;
+        }
+        
+        .topic-tag:hover::before {
+            transform: translateX(100%);
         }
         
         .card-footer {
-            margin-top: auto;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: rgba(246, 248, 250, 0.5);
+        }
+        
+        .level-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #586069;
+            font-size: 0.9rem;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        
+        .dot.active {
+            background-color: #586069;
         }
         
         .card.git .btn {
@@ -251,33 +424,23 @@
         }
         
         .card.deploy .btn:hover {
-            background-color: #0255b3;
+            background-color: #0550a0;
         }
         
-        .level-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            color: #586069;
-            font-size: 0.9rem;
+        .card.flask .btn {
+            background-color: var(--flask);
         }
         
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #ddd;
+        .card.flask .btn:hover {
+            background-color: #00796b;
         }
         
-        .dot.active {
-            background-color: #586069;
+        .card.fastapi .btn {
+            background-color: var(--fastapi);
         }
         
-        footer {
-            background-color: var(--secondary);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
+        .card.fastapi .btn:hover {
+            background-color: #3e3e3e;
         }
         
         .feature-section {
@@ -285,6 +448,7 @@
             padding: 3rem 0;
             margin: 3rem 0;
             border-radius: 10px;
+            box-shadow: var(--card-shadow);
         }
         
         .feature-container {
@@ -301,12 +465,154 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .feature:hover {
+            background-color: white;
+            transform: translateY(-5px);
         }
         
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
             color: var(--primary);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(46, 164, 79, 0.1);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(46, 164, 79, 0.2) 0%, rgba(46, 164, 79, 0) 70%);
+            opacity: 0;
+            z-index: -1;
+            transform: scale(0.5);
+            transition: all 0.5s ease-out;
+        }
+        
+        .feature:hover .feature-icon::after {
+            opacity: 1;
+            transform: scale(2);
+        }
+        
+        .resources-card {
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--deploy);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background-color: white;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .resources-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resources-icon {
+            flex-shrink: 0;
+            font-size: 3rem;
+            color: var(--deploy);
+        }
+        
+        .roadmap-steps {
+            list-style-type: none;
+            counter-reset: step-counter;
+            padding-left: 0;
+        }
+        
+        .roadmap-steps li {
+            counter-increment: step-counter;
+            position: relative;
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            margin-bottom: 1rem;
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .roadmap-steps li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .roadmap-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .roadmap-steps li a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .roadmap-steps li a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
         }
         
         @media (max-width: 768px) {
@@ -314,12 +620,31 @@
                 display: none;
             }
             
+            .mobile-menu {
+                display: block;
+                font-size: 1.5rem;
+                background: none;
+                border: none;
+                color: white;
+                cursor: pointer;
+            }
+            
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .hero p {
                 font-size: 1rem;
+            }
+            
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .resources-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
             }
         }
     </style>
@@ -330,16 +655,18 @@
             <nav>
                 <a href="index.html" style="text-decoration: none; color: inherit;">
                     <div class="logo">
-                        <span>Learn with KM</span>
-                        <span class="" style="font-size: 10px;">Web Development Tutorials</span>
+                        <span>Learn</span>
+                        <span>with KM</span>
                     </div>
                 </a>
                 <div class="nav-links">
                     <a href="#tutorials">Tutorials</a>
-                    <a href="#about">About</a>
+                    <a href="#resources">Resources</a>
                     <a href="#roadmap">Learning Path</a>
+                    <a href="#about">About</a>
                     <a href="#contact">Contact</a>
                 </div>
+                <button class="mobile-menu" style="display: none;">☰</button>
             </nav>
         </div>
     </header>
@@ -357,8 +684,8 @@
             <h2>Featured Tutorials</h2>
             <div class="card-container">
                 <div class="card web">
-                    <div class="card-icon">🌐</div>
                     <div class="card-content">
+                        <div class="card-icon">🌐</div>
                         <h3>Web Development Basics</h3>
                         <p>Learn the core technologies that power modern websites and web applications.</p>
                         <div class="card-topics">
@@ -380,8 +707,8 @@
                 </div>
                 
                 <div class="card git">
-                    <div class="card-icon">📝</div>
                     <div class="card-content">
+                        <div class="card-icon">📝</div>
                         <h3>Git & GitHub</h3>
                         <p>Master version control and collaboration skills essential for modern development workflows.</p>
                         <div class="card-topics">
@@ -403,8 +730,8 @@
                 </div>
                 
                 <div class="card django">
-                    <div class="card-icon">⚙️</div>
                     <div class="card-content">
+                        <div class="card-icon">⚙️</div>
                         <h3>Django Framework</h3>
                         <p>Build powerful web applications quickly with Django's "batteries-included" approach.</p>
                         <div class="card-topics">
@@ -426,11 +753,10 @@
                 </div>
                 
                 <div class="card deploy">
-                    <div class="card-icon">🚀</div>
                     <div class="card-content">
+                        <div class="card-icon">🚀</div>
                         <h3>Web Application Deployment</h3>
                         <p>Learn how to take your web applications from development to production with confidence.</p>
-                        <p><small><strong>Bonus:</strong> Check out our <a href="https://github.com/XmyKhnnt/docker-deploy-templates">Docker templates repository</a> for ready-to-use deployment configurations!</small></p>
                         <div class="card-topics">
                             <span class="topic-tag">Deployment</span>
                             <span class="topic-tag">Docker</span>
@@ -448,16 +774,62 @@
                         <a href="web_deploy.html" class="btn">Start Learning</a>
                     </div>
                 </div>
+                
+                <div class="card flask">
+                    <div class="card-content">
+                        <div class="card-icon">🔥</div>
+                        <h3>Flask Python Framework</h3>
+                        <p>Build lightweight and efficient web applications using Flask, a micro web framework for Python.</p>
+                        <div class="card-topics">
+                            <span class="topic-tag">Python</span>
+                            <span class="topic-tag">Flask</span>
+                            <span class="topic-tag">Backend</span>
+                            <span class="topic-tag">Web Development</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Intermediate</span>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <a href="flask.html" class="btn">Start Learning</a>
+                    </div>
+                </div>
+                
+                <div class="card fastapi">
+                    <div class="card-content">
+                        <div class="card-icon">⚡</div>
+                        <h3>FastAPI Python Framework</h3>
+                        <p>Build high-performance web applications using FastAPI, a modern, fast web framework for Python.</p>
+                        <div class="card-topics">
+                            <span class="topic-tag">Python</span>
+                            <span class="topic-tag">FastAPI</span>
+                            <span class="topic-tag">Backend</span>
+                            <span class="topic-tag">Web Development</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="level-indicator">
+                            <span>Advanced</span>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                            <div class="dot active"></div>
+                        </div>
+                        <a href="fastapi.html" class="btn">Start Learning</a>
+                    </div>
+                </div>
             </div>
         </section>
         
         <section id="resources">
             <h2>Additional Resources</h2>
             
-            <div class="card" style="border-left: 4px solid var(--deploy); padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem;">
-                <div style="flex-shrink: 0; font-size: 3rem; color: var(--deploy);">🐳</div>
-                <div style="flex-grow: 1;">
-                    <h3 style="margin-top: 0;">Docker Deployment Templates</h3>
+            <div class="resources-card">
+                <div class="resources-icon">🐳</div>
+                <div>
+                    <h3>Docker Deployment Templates</h3>
                     <p>Ready-to-use Docker templates for deploying various web applications. Perfect companion to the deployment tutorial!</p>
                     <p><strong>Includes templates for:</strong> Django, Node.js, React, Flask, and more.</p>
                     <a href="https://github.com/XmyKhnnt/docker-deploy-templates" class="btn" style="background-color: var(--deploy);">View Repository</a>
@@ -469,7 +841,7 @@
             <h2>Suggested Learning Path</h2>
             <p>Follow this recommended order to build your skills step by step:</p>
             
-            <ol>
+            <ol class="roadmap-steps">
                 <li><strong><a href="web_basics.html">Web Development Basics</a></strong> - Start with HTML, CSS, and JavaScript fundamentals</li>
                 <li><strong><a href="git_github.html">Git & GitHub</a></strong> - Learn version control to manage your code</li>
                 <li><strong><a href="django.html">Django Framework</a></strong> - Master backend development with Python</li>
@@ -518,12 +890,22 @@
             <h2>Get in Touch</h2>
             <p>Have questions, suggestions, or feedback about the tutorials? We'd love to hear from you!</p>
             
-            <p>Email us at: <a href="mailto:hello@withkhent.com">hello@withkhent.com</a></p>
-        
+            <p>Email us at: <a href="mailto:hello@withkhent.com" style="color: var(--primary); text-decoration: none;">hello@withkhent.com</a></p>
         </section>
     </main>
     
-  
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#tutorials">Tutorials</a>
+                <a href="#resources">Resources</a>
+                <a href="#roadmap">Learning Path</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="copyright">© 2025 Learn with KM. All rights reserved.</p>
+        </div>
+    </footer>
     
     <script>
         // Add smooth scrolling for anchor links
@@ -533,6 +915,51 @@
                 
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+        
+        /* Remove pulse animation from hero.btn in script */
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // Observe section headers
+            document.querySelectorAll('section h2').forEach(el => {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(20px)";
+                el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+                observer.observe(el);
+            });
+            
+            document.querySelectorAll('.animate-in').forEach(el => {
+                el.style.opacity = "1";
+                el.style.transform = "translateY(0)";
+            });
+            
+            // Add hover effects to buttons BUT NOT to the hero button
+            document.querySelectorAll('.card-footer .btn, .resources-card .btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.animation = 'pulse 1s infinite';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.animation = 'none';
                 });
             });
         });
